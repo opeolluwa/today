@@ -86,10 +86,6 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
         const userPreferences = await invoke<UserPreference[]>(
           "get_unsynced_user_preferences",
         );
-        console.log(
-          "Unsynced user preferences fetched:",
-          JSON.stringify(userPreferences, null, 2),
-        );
         return userPreferences;
       } catch (error) {
         console.error("Error fetching unsynced user preferences:", error);
@@ -100,6 +96,16 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
     async syncUpstream() {
       const userPreferences = await this.fetchUnsynced();
       if (!userPreferences.length) return;
+
+      const workspacesStore = useWorkspacesStore();
+      const workspaceIds = [
+        ...new Set(
+          userPreferences
+            .map((p) => p.workspaceIdentifier as string | null)
+            .filter((id): id is string => !!id),
+        ),
+      ];
+      await Promise.all(workspaceIds.map((id) => workspacesStore.resolveWorkspace(id)));
 
       const input = userPreferences.map((p) => ({
         identifier: p.identifier,

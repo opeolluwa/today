@@ -18,7 +18,7 @@ where
             .extract::<TypedHeader<Authorization<Bearer>>>()
             .await
             .map_err(|err| {
-                log::error!("failed to extract authorization header due to {err}");
+                tracing::error!("failed to extract authorization header due to {err}");
                 AuthenticationError::MissingCredentials
             })?;
         // Decode the user data

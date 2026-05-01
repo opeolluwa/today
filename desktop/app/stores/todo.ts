@@ -177,7 +177,6 @@ export const useTodoStore = defineStore("todo_store", {
     async fetchUnsynced() {
       try {
         const todos = await invoke<Todo[]>("get_unsynced_todos");
-        console.log("Unsynced todos fetched:", JSON.stringify(todos, null, 2));
         return todos;
       } catch (error) {
         console.error("Error fetching unsynced todos:", error);
@@ -188,6 +187,16 @@ export const useTodoStore = defineStore("todo_store", {
     async syncUpstream() {
       const todos = await this.fetchUnsynced();
       if (!todos.length) return;
+
+      const workspacesStore = useWorkspacesStore();
+      const workspaceIds = [
+        ...new Set(
+          todos
+            .map((t) => (t as any).workspaceIdentifier as string | null)
+            .filter((id): id is string => !!id),
+        ),
+      ];
+      await Promise.all(workspaceIds.map((id) => workspacesStore.resolveWorkspace(id)));
 
       const input = todos.map((t) => ({
         identifier: t.identifier,

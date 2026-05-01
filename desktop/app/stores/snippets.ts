@@ -139,10 +139,6 @@ export const useSnippetStore = defineStore("snippets_store", {
     async fetchUnsynced() {
       try {
         const snippets = await invoke<Snippet[]>("get_unsynced_snippets");
-        console.log(
-          "Unsynced snippets fetched:",
-          JSON.stringify(snippets, null, 2),
-        );
         return snippets;
       } catch (error) {
         console.error("Error fetching unsynced snippets:", error);
@@ -153,6 +149,16 @@ export const useSnippetStore = defineStore("snippets_store", {
     async syncUpstream() {
       const snippets = await this.fetchUnsynced();
       if (!snippets.length) return;
+
+      const workspacesStore = useWorkspacesStore();
+      const workspaceIds = [
+        ...new Set(
+          snippets
+            .map((s) => (s as any).workspaceIdentifier as string | null)
+            .filter((id): id is string => !!id),
+        ),
+      ];
+      await Promise.all(workspaceIds.map((id) => workspacesStore.resolveWorkspace(id)));
 
       const input = snippets.map((s) => ({
         identifier: s.identifier,

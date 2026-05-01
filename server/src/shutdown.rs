@@ -4,7 +4,7 @@ use tracing::info;
 pub async fn shutdown_signal() {
     let ctrl_c = async {
         if let Err(err) = signal::ctrl_c().await {
-            log::warn!("Failed to install Ctrl+C handler  due to {err}");
+            tracing::warn!("Failed to install Ctrl+C handler due to {err}");
         }
     };
 

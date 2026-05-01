@@ -103,10 +103,6 @@ export const useRecycleBinStore = defineStore("recycle_bin_store", {
         const recycleBin = await invoke<RecycleBinEntry[]>(
           "get_unsynced_recycle_bin",
         );
-        console.log(
-          "Unsynced recycle bin fetched:",
-          JSON.stringify(recycleBin, null, 2),
-        );
         return recycleBin;
       } catch (error) {
         console.error("Error fetching unsynced recycle bin:", error);
@@ -117,6 +113,16 @@ export const useRecycleBinStore = defineStore("recycle_bin_store", {
     async syncUpstream() {
       const recycleBin = await this.fetchUnsynced();
       if (!recycleBin.length) return;
+
+      const workspacesStore = useWorkspacesStore();
+      const workspaceIds = [
+        ...new Set(
+          recycleBin
+            .map((e) => (e as any).workspaceIdentifier as string | null)
+            .filter((id): id is string => !!id),
+        ),
+      ];
+      await Promise.all(workspaceIds.map((id) => workspacesStore.resolveWorkspace(id)));
 
       const input = recycleBin.map((e) => ({
         identifier: e.identifier,

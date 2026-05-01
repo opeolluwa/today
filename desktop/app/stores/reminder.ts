@@ -137,10 +137,6 @@ export const useReminderStore = defineStore("reminder_store", {
     async fetchUnsynced() {
       try {
         const reminders = await invoke<Reminder[]>("get_unsynced_reminders");
-        console.log(
-          "Unsynced reminders fetched:",
-          JSON.stringify(reminders, null, 2),
-        );
         return reminders;
       } catch (error) {
         console.error("Error fetching unsynced reminders:", error);
@@ -151,6 +147,16 @@ export const useReminderStore = defineStore("reminder_store", {
     async syncUpstream() {
       const reminders = await this.fetchUnsynced();
       if (!reminders.length) return;
+
+      const workspacesStore = useWorkspacesStore();
+      const workspaceIds = [
+        ...new Set(
+          reminders
+            .map((r) => (r as any).workspaceIdentifier as string | null)
+            .filter((id): id is string => !!id),
+        ),
+      ];
+      await Promise.all(workspaceIds.map((id) => workspacesStore.resolveWorkspace(id)));
 
       const input = reminders.map((r) => ({
         identifier: r.identifier,

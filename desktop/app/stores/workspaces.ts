@@ -33,6 +33,8 @@ export interface UpdateWorkspacePayload {
   password?: string;
 }
 
+const resolvedWorkspaceIds = new Set<string>();
+
 export const useWorkspacesStore = defineStore("workspaces_store", {
   state: () => ({
     workspaces: [] as Workspace[],
@@ -169,10 +171,6 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
     async fetchUnsynced() {
       try {
         const workspaces = await invoke<Workspace[]>("get_unsynced_workspaces");
-        console.log(
-          "Unsynced workspaces fetched:",
-          JSON.stringify(workspaces, null, 2),
-        );
         return workspaces;
       } catch (error) {
         console.error("Error fetching unsynced workspaces:", error);
@@ -217,6 +215,63 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
 
     async clearQueue(identifiers: string[]) {
       await invoke("clear_synced_workspaces", { identifiers });
+    },
+
+    async resolveWorkspace(identifier: string) {
+      if (!identifier || resolvedWorkspaceIds.has(identifier)) return;
+
+      const { client } = useApolloClient();
+      const existsQuery = gql`
+        query WorkspaceExists($identifier: String!) {
+          workspace_exists(identifier: $identifier)
+        }
+      `;
+
+      try {
+        const { data } = await client.query({
+          query: existsQuery,
+          variables: { identifier },
+          fetchPolicy: "network-only",
+        });
+
+        if (!data?.workspace_exists) {
+          const workspace = this.workspaces.find(
+            (w) => w.identifier === identifier,
+          );
+          if (workspace) {
+            const input = [
+              {
+                identifier: workspace.identifier,
+                name: workspace.name,
+                description: workspace.description,
+                created_at: workspace.createdAt,
+                updated_at: workspace.updatedAt,
+                is_default: workspace.isDefault,
+                is_hidden: workspace.isHidden,
+                is_secured: workspace.isSecured,
+                password_hash: (workspace as any).passwordHash ?? null,
+              },
+            ];
+            const syncMutation = gql`
+              mutation SyncWorkspaces($input: [SyncWorkspaceInput!]!) {
+                sync_workspace(input: $input) {
+                  success
+                  error_message
+                  identifier
+                }
+              }
+            `;
+            const { mutate } = useMutation(syncMutation, {
+              variables: { input },
+            });
+            await mutate();
+          }
+        }
+
+        resolvedWorkspaceIds.add(identifier);
+      } catch (error) {
+        console.error("Error resolving workspace:", identifier, error);
+      }
     },
   },
   persist: {
