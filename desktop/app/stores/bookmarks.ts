@@ -157,6 +157,18 @@ export const useBookmarkStore = defineStore("bookmark_store", {
       const bookmarks = await this.fetchUnsynced();
       if (!bookmarks.length) return;
 
+      const workspacesStore = useWorkspacesStore();
+      const workspaceIds = [
+        ...new Set(
+          bookmarks
+            .map((b) => (b as any).workspaceIdentifier as string | null)
+            .filter((id): id is string => !!id),
+        ),
+      ];
+      await Promise.all(
+        workspaceIds.map((id) => workspacesStore.resolveWorkspace(id)),
+      );
+
       const input = bookmarks.map((b) => ({
         identifier: b.identifier,
         title: b.title,
