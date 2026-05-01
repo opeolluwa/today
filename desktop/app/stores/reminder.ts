@@ -156,7 +156,9 @@ export const useReminderStore = defineStore("reminder_store", {
             .filter((id): id is string => !!id),
         ),
       ];
-      await Promise.all(workspaceIds.map((id) => workspacesStore.resolveWorkspace(id)));
+      await Promise.all(
+        workspaceIds.map((id) => workspacesStore.resolveWorkspace(id)),
+      );
 
       const input = reminders.map((r) => ({
         identifier: r.identifier,

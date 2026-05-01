@@ -158,7 +158,9 @@ export const useSnippetStore = defineStore("snippets_store", {
             .filter((id): id is string => !!id),
         ),
       ];
-      await Promise.all(workspaceIds.map((id) => workspacesStore.resolveWorkspace(id)));
+      await Promise.all(
+        workspaceIds.map((id) => workspacesStore.resolveWorkspace(id)),
+      );
 
       const input = snippets.map((s) => ({
         identifier: s.identifier,
