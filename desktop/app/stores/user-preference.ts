@@ -114,7 +114,10 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
 
       try {
         const data = await mutate();
-        console.log("User preferences sync response:", JSON.stringify(data, null, 2));
+        console.log(
+          "User preferences sync response:",
+          JSON.stringify(data, null, 2),
+        );
       } catch (error) {
         console.error("Error syncing user preferences:", error);
       }

@@ -174,7 +174,10 @@ export const useBookmarkStore = defineStore("bookmark_store", {
 
       try {
         const data = await mutate();
-        console.log("Bookmarks checks response:", JSON.stringify(data, null, 2));
+        console.log(
+          "Bookmarks checks response:",
+          JSON.stringify(data, null, 2),
+        );
       } catch (error) {
         console.error("Error syncing bookmarks:", error);
       }

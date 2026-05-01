@@ -130,7 +130,10 @@ export const useRecycleBinStore = defineStore("recycle_bin_store", {
 
       try {
         const data = await mutate();
-        console.log("Recycle bin sync response:", JSON.stringify(data, null, 2));
+        console.log(
+          "Recycle bin sync response:",
+          JSON.stringify(data, null, 2),
+        );
       } catch (error) {
         console.error("Error syncing recycle bin:", error);
       }
