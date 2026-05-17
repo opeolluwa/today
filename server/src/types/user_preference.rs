@@ -17,16 +17,24 @@ pub struct SyncUserPreferenceInput {
     pub workspace_identifier: Option<Uuid>,
 }
 
-impl From<SyncUserPreferenceInput> for entities::user_preference::Model {
-    fn from(val: SyncUserPreferenceInput) -> Self {
-        entities::user_preference::Model {
+impl TryFrom<SyncUserPreferenceInput> for entities::user_preference::Model {
+    type Error = async_graphql::Error;
+
+    fn try_from(val: SyncUserPreferenceInput) -> Result<Self, Self::Error> {
+        Ok(entities::user_preference::Model {
             identifier: val.identifier,
             first_name: val.first_name,
             last_name: val.last_name,
             email: val.email,
-            created_at: val.created_at.parse().unwrap(),
-            updated_at: val.updated_at.parse().unwrap(),
+            created_at: val
+                .created_at
+                .parse()
+                .map_err(|e| async_graphql::Error::new(format!("invalid created_at: {e}")))?,
+            updated_at: val
+                .updated_at
+                .parse()
+                .map_err(|e| async_graphql::Error::new(format!("invalid updated_at: {e}")))?,
             workspace_identifier: val.workspace_identifier,
-        }
+        })
     }
 }

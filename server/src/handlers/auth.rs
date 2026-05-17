@@ -89,8 +89,14 @@ pub async fn request_refresh_token(
         .build())
 }
 
-pub async fn logout() -> Result<ApiResponse<()>, ServiceError> {
-    todo!()
+pub async fn logout(
+    State(auth_service): State<AuthenticationService>,
+    claims: Claims,
+) -> Result<ApiResponse<()>, ServiceError> {
+    auth_service.logout(&claims).await?;
+    Ok(ApiResponseBuilder::new()
+        .message("logged out successfully")
+        .build())
 }
 
 pub async fn onboard_user(

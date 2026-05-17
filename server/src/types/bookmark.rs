@@ -18,16 +18,24 @@ pub struct SyncBookmarkInput {
     pub workspace_identifier: Option<Uuid>,
 }
 
-impl From<SyncBookmarkInput> for entities::bookmark::Model {
-    fn from(val: SyncBookmarkInput) -> Self {
-        entities::bookmark::Model {
+impl TryFrom<SyncBookmarkInput> for entities::bookmark::Model {
+    type Error = async_graphql::Error;
+
+    fn try_from(val: SyncBookmarkInput) -> Result<Self, Self::Error> {
+        Ok(entities::bookmark::Model {
             identifier: val.identifier,
             title: val.title,
             url: val.url,
             tag: val.tag,
-            created_at: val.created_at.parse().unwrap(),
-            updated_at: val.updated_at.parse().unwrap(),
+            created_at: val
+                .created_at
+                .parse()
+                .map_err(|e| async_graphql::Error::new(format!("invalid created_at: {e}")))?,
+            updated_at: val
+                .updated_at
+                .parse()
+                .map_err(|e| async_graphql::Error::new(format!("invalid updated_at: {e}")))?,
             workspace_identifier: val.workspace_identifier,
-        }
+        })
     }
 }

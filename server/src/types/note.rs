@@ -17,16 +17,24 @@ pub struct SyncNoteInput {
     pub workspace_identifier: Option<Uuid>,
 }
 
-impl From<SyncNoteInput> for entities::notes::Model {
-    fn from(val: SyncNoteInput) -> Self {
-        entities::notes::Model {
+impl TryFrom<SyncNoteInput> for entities::notes::Model {
+    type Error = async_graphql::Error;
+
+    fn try_from(val: SyncNoteInput) -> Result<Self, Self::Error> {
+        Ok(entities::notes::Model {
             identifier: val.identifier,
             title: val.title,
             content: val.content,
-            categories: None, //TODO: Handle categories separately if needed
-            created_at: val.created_at.parse().unwrap(),
-            updated_at: val.updated_at.parse().unwrap(),
+            categories: None,
+            created_at: val
+                .created_at
+                .parse()
+                .map_err(|e| async_graphql::Error::new(format!("invalid created_at: {e}")))?,
+            updated_at: val
+                .updated_at
+                .parse()
+                .map_err(|e| async_graphql::Error::new(format!("invalid updated_at: {e}")))?,
             workspace_identifier: val.workspace_identifier,
-        }
+        })
     }
 }

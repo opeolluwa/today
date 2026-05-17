@@ -19,18 +19,26 @@ pub struct SyncSnippetInput {
     pub workspace_identifier: Option<Uuid>,
 }
 
-impl From<SyncSnippetInput> for entities::snippets::Model {
-    fn from(val: SyncSnippetInput) -> Self {
-        entities::snippets::Model {
+impl TryFrom<SyncSnippetInput> for entities::snippets::Model {
+    type Error = async_graphql::Error;
+
+    fn try_from(val: SyncSnippetInput) -> Result<Self, Self::Error> {
+        Ok(entities::snippets::Model {
             identifier: val.identifier,
             title: val.title,
             language: val.language,
             code: val.code,
             description: val.description,
             is_pinned: val.is_pinned,
-            created_at: val.created_at.parse().unwrap(),
-            updated_at: val.updated_at.parse().unwrap(),
+            created_at: val
+                .created_at
+                .parse()
+                .map_err(|e| async_graphql::Error::new(format!("invalid created_at: {e}")))?,
+            updated_at: val
+                .updated_at
+                .parse()
+                .map_err(|e| async_graphql::Error::new(format!("invalid updated_at: {e}")))?,
             workspace_identifier: val.workspace_identifier,
-        }
+        })
     }
 }

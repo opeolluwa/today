@@ -17,15 +17,20 @@ pub struct SyncRecycleBinInput {
     pub workspace_identifier: Option<Uuid>,
 }
 
-impl From<SyncRecycleBinInput> for entities::recycle_bin::Model {
-    fn from(val: SyncRecycleBinInput) -> Self {
-        entities::recycle_bin::Model {
+impl TryFrom<SyncRecycleBinInput> for entities::recycle_bin::Model {
+    type Error = async_graphql::Error;
+
+    fn try_from(val: SyncRecycleBinInput) -> Result<Self, Self::Error> {
+        Ok(entities::recycle_bin::Model {
             identifier: val.identifier,
             item_id: val.item_id,
             item_type: val.item_type,
             payload: val.payload,
-            deleted_at: val.deleted_at.parse().unwrap(),
+            deleted_at: val
+                .deleted_at
+                .parse()
+                .map_err(|e| async_graphql::Error::new(format!("invalid deleted_at: {e}")))?,
             workspace_identifier: val.workspace_identifier,
-        }
+        })
     }
 }

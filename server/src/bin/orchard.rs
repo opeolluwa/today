@@ -129,7 +129,12 @@ async fn main() -> Result<(), AppError> {
         app_config.graphql_endpoint
     );
     tracing::info!("Service health check at http://{}/health", ip_address,);
-    axum::serve(TcpListener::bind(ip_address).await.unwrap(), app)
+    axum::serve(
+        TcpListener::bind(ip_address)
+            .await
+            .map_err(|e| AppError::InternalError(format!("failed to bind to {ip_address}: {e}")))?,
+        app,
+    )
         .with_graceful_shutdown(shutdown_signal())
         .await
         .map_err(|err| AppError::InternalError(err.to_string()))?;

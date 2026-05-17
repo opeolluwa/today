@@ -16,6 +16,7 @@ use crate::errors::service_error::ServiceError;
 // use crate::events::redis::RedisClient;
 // use crate::events::redis::RedisClientExt;
 use crate::repositories::base::Repository;
+use crate::repositories::revoked_tokens::{TokenBlacklistRepository, TokenBlacklistRepositoryTrait};
 use crate::services::otp_service::OtpService;
 use crate::services::otp_service::OtpServiceExt;
 use crate::{
@@ -34,6 +35,7 @@ pub struct AuthenticationService {
     user_repository: UserRepository,
     user_helper_service: ServiceHelpers,
     otp_service: OtpService,
+    token_blacklist_repository: TokenBlacklistRepository,
 }
 
 impl AuthenticationService {
@@ -42,6 +44,7 @@ impl AuthenticationService {
             user_repository: UserRepository::init(db_conn),
             user_helper_service: ServiceHelpers::init(),
             otp_service: OtpService::init(db_conn),
+            token_blacklist_repository: TokenBlacklistRepository::init(db_conn),
         }
     }
 }
@@ -107,6 +110,16 @@ pub trait AuthenticationServiceTrait {
         request: &ChangePasswordRequest,
         claims: &Claims,
     ) -> impl std::future::Future<Output = Result<(), ServiceError>> + Send;
+
+    fn logout(
+        &self,
+        claims: &Claims,
+    ) -> impl std::future::Future<Output = Result<(), ServiceError>> + Send;
+
+    fn is_token_revoked(
+        &self,
+        claims: &Claims,
+    ) -> impl std::future::Future<Output = Result<bool, ServiceError>> + Send;
 }
 
 impl AuthenticationServiceTrait for AuthenticationService {
@@ -409,5 +422,25 @@ impl AuthenticationServiceTrait for AuthenticationService {
             .await?;
 
         Ok(())
+    }
+
+    async fn logout(&self, claims: &Claims) -> Result<(), ServiceError> {
+        let Some(jti) = claims.jti else {
+            return Ok(());
+        };
+        let expires_at = chrono::DateTime::from_timestamp(claims.exp, 0)
+            .unwrap_or_else(chrono::Utc::now)
+            .fixed_offset();
+        self.token_blacklist_repository
+            .revoke_token(&jti, &claims.user_identifier, expires_at)
+            .await?;
+        Ok(())
+    }
+
+    async fn is_token_revoked(&self, claims: &Claims) -> Result<bool, ServiceError> {
+        let Some(jti) = claims.jti else {
+            return Ok(false);
+        };
+        Ok(self.token_blacklist_repository.is_revoked(&jti).await?)
     }
 }

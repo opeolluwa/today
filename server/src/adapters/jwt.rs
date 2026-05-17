@@ -20,6 +20,8 @@ pub struct Claims {
     pub(crate) exp: i64,
     pub(crate) email: String,
     pub(crate) user_identifier: Uuid,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub(crate) jti: Option<Uuid>,
 }
 
 impl Display for Claims {
@@ -106,6 +108,10 @@ impl ClaimsBuilder {
             self.claims.sub = self.claims.user_identifier.to_string();
         }
 
+        if self.claims.jti.is_none() {
+            self.claims.jti = Some(Uuid::new_v4());
+        }
+
         Ok(self.claims)
     }
 
@@ -169,6 +175,7 @@ impl Claims {
             } else {
                 self.exp
             },
+            jti: self.jti.or_else(|| Some(Uuid::new_v4())),
         };
 
         let secret = extract_env::<String>("JWT_SIGNING_KEY")?;
@@ -191,6 +198,7 @@ impl Claims {
             iat: now,
             exp: now + validity.as_secs() as i64,
             sub: self.sub.to_owned(),
+            jti: self.jti.or_else(|| Some(Uuid::new_v4())),
         };
 
         let secret = extract_env::<String>("JWT_SIGNING_KEY").map_err(AuthenticationError::from)?;

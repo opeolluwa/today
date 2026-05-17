@@ -10,7 +10,7 @@ import 'scripts/release.just'
 import 'scripts/mobile.just'
 
 
-DB_PATH := "sqlite://../../test.sqlite?mode=rwc"
+DB_PffigenATH := "sqlite://../../test.sqlite?mode=rwc"
 DOCKER_CMD := "docker compose -f docker-compose.yaml"
 POSTGRES_URL := "postgres://almond:almond@localhost:5433/almond"
 MYSQL_URL    := "mysql://almond:almond@localhost:3307/almond"
