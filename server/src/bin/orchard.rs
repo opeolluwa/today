@@ -135,9 +135,9 @@ async fn main() -> Result<(), AppError> {
             .map_err(|e| AppError::InternalError(format!("failed to bind to {ip_address}: {e}")))?,
         app,
     )
-        .with_graceful_shutdown(shutdown_signal())
-        .await
-        .map_err(|err| AppError::InternalError(err.to_string()))?;
+    .with_graceful_shutdown(shutdown_signal())
+    .await
+    .map_err(|err| AppError::InternalError(err.to_string()))?;
 
     Ok(())
 }

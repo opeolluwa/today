@@ -4,9 +4,7 @@ use std::io;
 use async_trait::async_trait;
 use bcrypt::{hash, verify, DEFAULT_COST};
 use lettre::{
-    message::header::ContentType,
-    message::Mailbox,
-    transport::smtp::authentication::Credentials,
+    message::header::ContentType, message::Mailbox, transport::smtp::authentication::Credentials,
     AsyncSmtpTransport, AsyncTransport, Message, Tokio1Executor,
 };
 use rand::RngExt;

@@ -1,5 +1,4 @@
 mod m20251225_140002_create_user_table;
-mod m20260517000000_create_revoked_tokens;
 mod m20251225_144622_create_otp_table;
 mod m20251225_144754_update_otp_code;
 mod m20251225_144927_rename_table;
@@ -10,6 +9,7 @@ mod m20251225_150219_add_username_to_users_table;
 mod m20251225_150349_add_countries;
 mod m20251227_224856_make_profile_picture_nullable;
 mod m20251227_225947_make_user_name_nullable;
+mod m20260517000000_create_revoked_tokens;
 
 #[allow(unused_imports)]
 pub use sea_orm_migration::prelude::*;

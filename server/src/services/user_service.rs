@@ -96,8 +96,8 @@ impl UserServiceTrait for UserService {
             .clone()
             .ok_or(ServiceError::OperationFailed)?;
 
-        let config = AppConfig::from_env()
-            .map_err(|e| ServiceError::InternalError(e.to_string()))?;
+        let config =
+            AppConfig::from_env().map_err(|e| ServiceError::InternalError(e.to_string()))?;
         let temp_dir = Path::new(&config.upload_path);
         let file_path = temp_dir.join(format!(
             "{time_stamp}_{file_name}",

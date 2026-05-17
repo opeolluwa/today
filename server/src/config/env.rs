@@ -60,16 +60,18 @@ impl AppConfig {
         let depth_limit = env::var("DEPTH_LIMIT")
             .ok()
             .map(|v| {
-                v.parse::<usize>()
-                    .map_err(|_| KernelError::EnvError("DEPTH_LIMIT must be a valid number".to_string()))
+                v.parse::<usize>().map_err(|_| {
+                    KernelError::EnvError("DEPTH_LIMIT must be a valid number".to_string())
+                })
             })
             .transpose()?;
 
         let complexity_limit = env::var("COMPLEXITY_LIMIT")
             .ok()
             .map(|v| {
-                v.parse::<usize>()
-                    .map_err(|_| KernelError::EnvError("COMPLEXITY_LIMIT must be a valid number".to_string()))
+                v.parse::<usize>().map_err(|_| {
+                    KernelError::EnvError("COMPLEXITY_LIMIT must be a valid number".to_string())
+                })
             })
             .transpose()?;
 

@@ -16,7 +16,9 @@ use crate::errors::service_error::ServiceError;
 // use crate::events::redis::RedisClient;
 // use crate::events::redis::RedisClientExt;
 use crate::repositories::base::Repository;
-use crate::repositories::revoked_tokens::{TokenBlacklistRepository, TokenBlacklistRepositoryTrait};
+use crate::repositories::revoked_tokens::{
+    TokenBlacklistRepository, TokenBlacklistRepositoryTrait,
+};
 use crate::services::otp_service::OtpService;
 use crate::services::otp_service::OtpServiceExt;
 use crate::{
