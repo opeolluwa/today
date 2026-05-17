@@ -29,8 +29,10 @@ impl SyncBookmark {
         let db = extract_db_conn(ctx)?;
         let repo = BookmarkRepository::new(Arc::new(db.clone()));
 
-        let models: Vec<entities::bookmark::Model> =
-            input.into_iter().map(|item| item.into()).collect();
+        let models: Vec<entities::bookmark::Model> = input
+            .into_iter()
+            .map(|item| item.try_into())
+            .collect::<Result<_, _>>()?;
 
         let res = repo
             .upsert_many(models)
