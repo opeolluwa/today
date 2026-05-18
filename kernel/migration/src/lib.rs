@@ -66,7 +66,9 @@ impl MigratorTrait for Migrator {
             Box::new(m20260331_000000_add_workspace_flags::Migration),
             Box::new(m20260403_000000_add_workspace_security::Migration),
             Box::new(m20260501_000000_fix_sync_queue_uuid_triggers::Migration),
-            Box::new(m20260518_000000_remove_email_unique_constraint_from_user_preference::Migration),
+            Box::new(
+                m20260518_000000_remove_email_unique_constraint_from_user_preference::Migration,
+            ),
         ]
     }
 }
