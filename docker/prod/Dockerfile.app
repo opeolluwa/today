@@ -1,6 +1,3 @@
-# syntax=docker/dockerfile:1.4
-
-# ── Builder ────────────────────────────────────────────────────────────────────
 FROM rust:1.93-slim-bookworm AS builder
 
 ENV CARGO_TARGET_DIR=/cargo-target
@@ -26,10 +23,8 @@ COPY server ./server
 # Compile in release mode.
 # BuildKit cache mounts keep the registry and target dir across rebuilds
 # so only changed crates are recompiled.
-RUN --mount=type=cache,target=/usr/local/cargo/registry \
-    --mount=type=cache,target=/cargo-target \
+RUN --mount=type=cache,id=cargo-registry,target=/usr/local/cargo/registry \
     cargo build --release --manifest-path server/Cargo.toml --bin orchard && \
-    # Copy the binary out of the cache mount before the layer is sealed
     cp /cargo-target/release/orchard /orchard
 
 # ── Runtime ────────────────────────────────────────────────────────────────────
