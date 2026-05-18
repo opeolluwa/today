@@ -1,6 +1,6 @@
 FROM rust:1.93-slim-bookworm AS builder
 
-ENV CARGO_TARGET_DIR=/cargo-target
+
 
 RUN set -e && \
     apt-get update -q && \
@@ -20,14 +20,9 @@ WORKDIR /app
 COPY kernel ./kernel
 COPY server ./server
 
-# Compile in release mode.
-# BuildKit cache mounts keep the registry and target dir across rebuilds
-# so only changed crates are recompiled.
-RUN --mount=type=cache,id=cargo-registry,target=/usr/local/cargo/registry \
-    cargo build --release --manifest-path server/Cargo.toml --bin orchard && \
-    cp /cargo-target/release/orchard /orchard
+RUN cargo build --release --manifest-path server/Cargo.toml --bin orchard && \
+    cp server/target/release/orchard /orchard
 
-# ── Runtime ────────────────────────────────────────────────────────────────────
 FROM debian:bookworm-slim AS runtime
 
 RUN set -e && \
