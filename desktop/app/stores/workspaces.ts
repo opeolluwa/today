@@ -1,12 +1,6 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
 
-type SyncResult = {
-  success: boolean;
-  error_message: string | null;
-  identifier: string;
-};
-
 export interface Workspace {
   identifier: string;
   name: string;
@@ -32,6 +26,8 @@ export interface UpdateWorkspacePayload {
   /** Plain-text password; pass empty string to remove the password. */
   password?: string;
 }
+
+const resolvedWorkspaceIds = new Set<string>();
 
 export const useWorkspacesStore = defineStore("workspaces_store", {
   state: () => ({
@@ -169,10 +165,6 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
     async fetchUnsynced() {
       try {
         const workspaces = await invoke<Workspace[]>("get_unsynced_workspaces");
-        console.log(
-          "Unsynced workspaces fetched:",
-          JSON.stringify(workspaces, null, 2),
-        );
         return workspaces;
       } catch (error) {
         console.error("Error fetching unsynced workspaces:", error);
@@ -209,7 +201,7 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
 
       try {
         const data = await mutate();
-        console.log("Workspaces sync response:", data);
+        console.log("Workspaces sync response:", JSON.stringify(data, null, 2));
       } catch (error) {
         console.error("Error syncing workspaces:", error);
       }
@@ -217,6 +209,74 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
 
     async clearQueue(identifiers: string[]) {
       await invoke("clear_synced_workspaces", { identifiers });
+    },
+
+    async resolveWorkspace(identifier: string) {
+      if (!identifier || resolvedWorkspaceIds.has(identifier)) return;
+
+      const { client } = useApolloClient();
+      const existsQuery = gql`
+        query FindWorkSpaces($identifier: String!) {
+          workspaces(filters: { identifier: $identifier }) {
+            nodes {
+              identifier
+              name
+              createdAt
+              isHidden
+              isDefault
+              isSecured
+              description
+            }
+          }
+        }
+      `;
+
+      try {
+        const { data } = await client.query({
+          query: existsQuery,
+          variables: { identifier },
+          fetchPolicy: "network-only",
+        });
+
+        if (!data?.workspace_exists) {
+          const workspace = this.workspaces.find(
+            (w) => w.identifier === identifier,
+          );
+          if (workspace) {
+            const input = [
+              {
+                identifier: workspace.identifier,
+                name: workspace.name,
+                description: workspace.description,
+                created_at: workspace.createdAt,
+                updated_at: workspace.updatedAt,
+                is_default: workspace.isDefault,
+                is_hidden: workspace.isHidden,
+                is_secured: workspace.isSecured,
+                password_hash: (workspace as any).passwordHash ?? null,
+              },
+            ];
+            const syncMutation = gql`
+              mutation SyncWorkspaces($input: [SyncWorkspaceInput!]!) {
+                sync_workspace(input: $input) {
+                  success
+                  error_message
+                  identifier
+                }
+              }
+            `;
+            const { mutate } = useMutation(syncMutation, {
+              variables: { input },
+            });
+            await mutate();
+          }
+        }
+
+        resolvedWorkspaceIds.add(identifier);
+      } catch (error) {
+        console.error("Error resolving workspace:", identifier, error);
+        throw error;
+      }
     },
   },
   persist: {

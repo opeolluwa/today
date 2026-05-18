@@ -19,18 +19,26 @@ pub struct SyncWorkspaceInput {
     pub password_hash: Option<String>,
 }
 
-impl From<SyncWorkspaceInput> for entities::workspaces::Model {
-    fn from(val: SyncWorkspaceInput) -> Self {
-        entities::workspaces::Model {
+impl TryFrom<SyncWorkspaceInput> for entities::workspaces::Model {
+    type Error = async_graphql::Error;
+
+    fn try_from(val: SyncWorkspaceInput) -> Result<Self, Self::Error> {
+        Ok(entities::workspaces::Model {
             identifier: val.identifier,
             name: val.name,
             description: val.description,
-            created_at: val.created_at.parse().unwrap(),
-            updated_at: val.updated_at.parse().unwrap(),
+            created_at: val
+                .created_at
+                .parse()
+                .map_err(|e| async_graphql::Error::new(format!("invalid created_at: {e}")))?,
+            updated_at: val
+                .updated_at
+                .parse()
+                .map_err(|e| async_graphql::Error::new(format!("invalid updated_at: {e}")))?,
             is_default: val.is_default,
             is_hidden: val.is_hidden,
             is_secured: val.is_secured,
             password_hash: val.password_hash,
-        }
+        })
     }
 }

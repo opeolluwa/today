@@ -27,6 +27,7 @@ use tower_http::{
     trace::{self, TraceLayer},
 };
 use tracing::Level;
+use tracing_subscriber::EnvFilter;
 
 use orchard_migration::{Migrator, MigratorTrait};
 
@@ -44,7 +45,11 @@ async fn graphql_handler(
     req: GraphQLRequest,
 ) -> GraphQLResponse {
     let req = req.into_inner().data(headers);
-    schema.execute(req).await.into()
+    let response = schema.execute(req).await;
+    if response.is_err() {
+        tracing::warn!(errors = ?response.errors, "GraphQL errors in response");
+    }
+    response.into()
 }
 
 #[tokio::main]
@@ -53,11 +58,8 @@ async fn main() -> Result<(), AppError> {
 
     let app_config = AppConfig::from_env()?;
 
-    dbg!(&app_config);
     tracing_subscriber::fmt()
-        .with_max_level(tracing::Level::INFO)
-        .with_test_writer()
-        .without_time()
+        .with_env_filter(EnvFilter::from_default_env().add_directive(Level::INFO.into()))
         .init();
 
     let cors = if app_config.environment == "production" {
@@ -127,10 +129,15 @@ async fn main() -> Result<(), AppError> {
         app_config.graphql_endpoint
     );
     tracing::info!("Service health check at http://{}/health", ip_address,);
-    axum::serve(TcpListener::bind(ip_address).await.unwrap(), app)
-        .with_graceful_shutdown(shutdown_signal())
-        .await
-        .map_err(|err| AppError::InternalError(err.to_string()))?;
+    axum::serve(
+        TcpListener::bind(ip_address)
+            .await
+            .map_err(|e| AppError::InternalError(format!("failed to bind to {ip_address}: {e}")))?,
+        app,
+    )
+    .with_graceful_shutdown(shutdown_signal())
+    .await
+    .map_err(|err| AppError::InternalError(err.to_string()))?;
 
     Ok(())
 }

@@ -5,8 +5,8 @@ use axum::{
 
 use crate::{
     handlers::auth::{
-        create_account, forgotten_password, login, onboard_user, request_refresh_token,
-        set_new_password, verify_account, verify_reset_otp,
+        change_password, create_account, forgotten_password, login, logout, onboard_user,
+        request_refresh_token, set_new_password, verify_account, verify_reset_otp,
     },
     states::ServicesState,
 };
@@ -21,5 +21,7 @@ pub(super) fn authentication_routes(state: ServicesState) -> Router {
         .route("/refresh-token", get(request_refresh_token))
         .route("/onboard", post(onboard_user))
         .route("/verify", post(verify_reset_otp))
+        .route("/change-password", post(change_password))
+        .route("/logout", post(logout))
         .with_state(state)
 }

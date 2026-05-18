@@ -148,7 +148,6 @@ export const useNoteStore = defineStore("notes_store", {
     async fetchUnsynced() {
       try {
         const notes = await invoke<Note[]>("get_unsynced_notes");
-        console.log("Unsynced notes fetched:", JSON.stringify(notes, null, 2));
         return notes;
       } catch (error) {
         console.error("Error fetching unsynced notes:", error);
@@ -183,7 +182,7 @@ export const useNoteStore = defineStore("notes_store", {
 
       try {
         const data = await mutate();
-        console.log("Notes checks response:", data);
+        console.log("Notes checks response:", JSON.stringify(data, null, 2));
       } catch (error) {
         console.error("Error syncing notes:", error);
       }

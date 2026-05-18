@@ -28,8 +28,10 @@ impl SyncTodo {
         let db = extract_db_conn(ctx)?;
         let repo = TodoRepository::new(Arc::new(db.clone()));
 
-        let models: Vec<entities::todo::Model> =
-            input.into_iter().map(|item| item.into()).collect();
+        let models: Vec<entities::todo::Model> = input
+            .into_iter()
+            .map(|item| item.try_into())
+            .collect::<Result<_, _>>()?;
 
         let res = repo
             .upsert_many(models)

@@ -2,12 +2,6 @@ import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
 import { getWorkspaceMeta } from "~/composables/getWorkspaceMeta";
 
-type SyncResult = {
-  success: boolean;
-  error_message: string | null;
-  identifier: string;
-};
-
 export interface UserPreference {
   identifier: string;
   firstName: string;
@@ -86,10 +80,6 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
         const userPreferences = await invoke<UserPreference[]>(
           "get_unsynced_user_preferences",
         );
-        console.log(
-          "Unsynced user preferences fetched:",
-          JSON.stringify(userPreferences, null, 2),
-        );
         return userPreferences;
       } catch (error) {
         console.error("Error fetching unsynced user preferences:", error);
@@ -124,7 +114,10 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
 
       try {
         const data = await mutate();
-        console.log("User preferences sync response:", data);
+        console.log(
+          "User preferences sync response:",
+          JSON.stringify(data, null, 2),
+        );
       } catch (error) {
         console.error("Error syncing user preferences:", error);
       }

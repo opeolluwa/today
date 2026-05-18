@@ -24,12 +24,6 @@ export interface UpdateBookmarkPayload {
   tag?: BookmarkTag;
 }
 
-type SyncResult = {
-  success: boolean;
-  error_message: string | null;
-  identifier: string;
-};
-
 export const useBookmarkStore = defineStore("bookmark_store", {
   state: () => ({
     bookmarks: [] as Bookmark[],
@@ -146,10 +140,6 @@ export const useBookmarkStore = defineStore("bookmark_store", {
     async fetchUnsynced() {
       try {
         const bookmarks = await invoke<Bookmark[]>("get_unsynced_bookmarks");
-        console.log(
-          "Unsynced bookmarks fetched:",
-          JSON.stringify(bookmarks, null, 2),
-        );
         return bookmarks;
       } catch (error) {
         console.error("Error fetching unsynced bookmarks:", error);
@@ -184,7 +174,10 @@ export const useBookmarkStore = defineStore("bookmark_store", {
 
       try {
         const data = await mutate();
-        console.log("Bookmarks checks response:", data);
+        console.log(
+          "Bookmarks checks response:",
+          JSON.stringify(data, null, 2),
+        );
       } catch (error) {
         console.error("Error syncing bookmarks:", error);
       }

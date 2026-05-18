@@ -59,11 +59,21 @@ impl AppConfig {
 
         let depth_limit = env::var("DEPTH_LIMIT")
             .ok()
-            .map(|v| v.parse().expect("DEPTH_LIMIT is not a number"));
+            .map(|v| {
+                v.parse::<usize>().map_err(|_| {
+                    KernelError::EnvError("DEPTH_LIMIT must be a valid number".to_string())
+                })
+            })
+            .transpose()?;
 
         let complexity_limit = env::var("COMPLEXITY_LIMIT")
             .ok()
-            .map(|v| v.parse().expect("COMPLEXITY_LIMIT is not a number"));
+            .map(|v| {
+                v.parse::<usize>().map_err(|_| {
+                    KernelError::EnvError("COMPLEXITY_LIMIT must be a valid number".to_string())
+                })
+            })
+            .transpose()?;
 
         // Parse allowed origins (comma-separated)
         let allowed_origins = match extract_env::<String>("ALLOWED_ORIGINS").as_deref() {

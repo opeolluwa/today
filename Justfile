@@ -10,13 +10,13 @@ import 'scripts/release.just'
 import 'scripts/mobile.just'
 
 
-DB_PATH := "sqlite://../../test.sqlite?mode=rwc"
+DB_PffigenATH := "sqlite://../../test.sqlite?mode=rwc"
 DOCKER_CMD := "docker compose -f docker-compose.yaml"
 POSTGRES_URL := "postgres://almond:almond@localhost:5433/almond"
 MYSQL_URL    := "mysql://almond:almond@localhost:3307/almond"
 SQLITE_URL   := "sqlite://./almond.db?mode=rwc"
 DATABASE_URL :="postgres://orchard:orchard@localhost:6543/orchard"
-
+DB_PATH := ""
 set dotenv-required := false
 set dotenv-load := true
 set dotenv-path := ".env"

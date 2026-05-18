@@ -1,12 +1,6 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
 
-type SyncResult = {
-  success: boolean;
-  error_message: string | null;
-  identifier: string;
-};
-
 export interface Reminder {
   identifier: string;
   title: string;
@@ -137,10 +131,6 @@ export const useReminderStore = defineStore("reminder_store", {
     async fetchUnsynced() {
       try {
         const reminders = await invoke<Reminder[]>("get_unsynced_reminders");
-        console.log(
-          "Unsynced reminders fetched:",
-          JSON.stringify(reminders, null, 2),
-        );
         return reminders;
       } catch (error) {
         console.error("Error fetching unsynced reminders:", error);
@@ -178,7 +168,7 @@ export const useReminderStore = defineStore("reminder_store", {
 
       try {
         const data = await mutate();
-        console.log("Reminders sync response:", data);
+        console.log("Reminders sync response:", JSON.stringify(data, null, 2));
       } catch (error) {
         console.error("Error syncing reminders:", error);
       }

@@ -90,9 +90,14 @@ impl UserServiceTrait for UserService {
         _user_identifier: &Uuid,
     ) -> Result<(), ServiceError> {
         // tokio::task::spawn(async move {
-        let file_name = image.metadata.file_name.clone().unwrap(); //TODO: undo unwrap
+        let file_name = image
+            .metadata
+            .file_name
+            .clone()
+            .ok_or(ServiceError::OperationFailed)?;
 
-        let config = AppConfig::from_env().unwrap();
+        let config =
+            AppConfig::from_env().map_err(|e| ServiceError::InternalError(e.to_string()))?;
         let temp_dir = Path::new(&config.upload_path);
         let file_path = temp_dir.join(format!(
             "{time_stamp}_{file_name}",

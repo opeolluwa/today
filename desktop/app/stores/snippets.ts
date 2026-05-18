@@ -1,12 +1,6 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
 
-type SyncResult = {
-  success: boolean;
-  error_message: string | null;
-  identifier: string;
-};
-
 export interface Snippet {
   identifier: string;
   title: string | null;
@@ -139,10 +133,6 @@ export const useSnippetStore = defineStore("snippets_store", {
     async fetchUnsynced() {
       try {
         const snippets = await invoke<Snippet[]>("get_unsynced_snippets");
-        console.log(
-          "Unsynced snippets fetched:",
-          JSON.stringify(snippets, null, 2),
-        );
         return snippets;
       } catch (error) {
         console.error("Error fetching unsynced snippets:", error);
@@ -179,7 +169,7 @@ export const useSnippetStore = defineStore("snippets_store", {
 
       try {
         const data = await mutate();
-        console.log("Snippets sync response:", data);
+        console.log("Snippets sync response:", JSON.stringify(data, null, 2));
       } catch (error) {
         console.error("Error syncing snippets:", error);
       }

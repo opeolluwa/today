@@ -1,12 +1,6 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
 
-type SyncResult = {
-  success: boolean;
-  error_message: string | null;
-  identifier: string;
-};
-
 export type RecycleBinItemType =
   | "note"
   | "todo"
@@ -103,10 +97,6 @@ export const useRecycleBinStore = defineStore("recycle_bin_store", {
         const recycleBin = await invoke<RecycleBinEntry[]>(
           "get_unsynced_recycle_bin",
         );
-        console.log(
-          "Unsynced recycle bin fetched:",
-          JSON.stringify(recycleBin, null, 2),
-        );
         return recycleBin;
       } catch (error) {
         console.error("Error fetching unsynced recycle bin:", error);
@@ -128,7 +118,7 @@ export const useRecycleBinStore = defineStore("recycle_bin_store", {
       }));
       const query = gql`
         mutation SyncRecycleBin($input: [SyncRecycleBinInput!]!) {
-          sync_recycle_bin(input: $input) {
+          sync_recycle_bin_item(input: $input) {
             success
             error_message
             identifier
@@ -140,7 +130,10 @@ export const useRecycleBinStore = defineStore("recycle_bin_store", {
 
       try {
         const data = await mutate();
-        console.log("Recycle bin sync response:", data);
+        console.log(
+          "Recycle bin sync response:",
+          JSON.stringify(data, null, 2),
+        );
       } catch (error) {
         console.error("Error syncing recycle bin:", error);
       }
