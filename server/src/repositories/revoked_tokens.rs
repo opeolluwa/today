@@ -47,19 +47,24 @@ impl TokenBlacklistRepositoryTrait for TokenBlacklistRepository {
             expires_at: Set(expires_at),
             revoked_at: Set(chrono::Utc::now().fixed_offset()),
         };
-        record
-            .insert(self.db_conn.as_ref())
-            .await
-            .map_err(DatabaseError::from)?;
+
+        //TODO> FIX 
+        // record
+        //     .insert(self.db_conn.as_ref())
+        //     .await
+        //     .map_err(DatabaseError::from)?;
         Ok(())
     }
 
     async fn is_revoked(&self, jti: &Uuid) -> Result<bool, DatabaseError> {
-        let record = revoked_tokens::Entity::find()
-            .filter(revoked_tokens::Column::Jti.eq(*jti))
-            .one(self.db_conn.as_ref())
-            .await
-            .map_err(DatabaseError::from)?;
-        Ok(record.is_some())
+        // let record = revoked_tokens::Entity::find()
+        //     .filter(revoked_tokens::Column::Jti.eq(*jti))
+        //     .one(self.db_conn.as_ref())
+        //     .await
+        //     .map_err(DatabaseError::from)?;
+        // Ok(record.is_some())
+        // 
+        // TODO: fix
+        todo!()
     }
 }
