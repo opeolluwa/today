@@ -10,7 +10,7 @@ pub struct CreateUserPreference {
     pub meta: Option<RequestMeta>,
 }
 
-impl From<CreateUserPreference> for almond_kernel::adapters::user_preference::CreateUserPreference {
+impl From<CreateUserPreference> for almond_kernel::adapters::workspace_preferences::CreateUserPreference {
     fn from(p: CreateUserPreference) -> Self {
         Self {
             first_name: p.first_name,
@@ -29,7 +29,7 @@ pub struct UpdateUserPreference {
     pub meta: Option<RequestMeta>,
 }
 
-impl From<UpdateUserPreference> for almond_kernel::adapters::user_preference::UpdateUserPreference {
+impl From<UpdateUserPreference> for almond_kernel::adapters::workspace_preferences::UpdateUserPreference {
     fn from(p: UpdateUserPreference) -> Self {
         Self {
             first_name: p.first_name,

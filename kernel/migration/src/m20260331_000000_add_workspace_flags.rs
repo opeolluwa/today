@@ -18,16 +18,34 @@ impl MigrationTrait for Migration {
                 "#,
             )
             .await?;
-        } else {
+        } else if backend == DbBackend::MySql {
+            if !manager.has_column("workspaces", "is_default").await? {
+                db.execute_unprepared(
+                    "ALTER TABLE workspaces ADD COLUMN is_default TINYINT NOT NULL DEFAULT 0",
+                )
+                .await?;
+            }
+            if !manager.has_column("workspaces", "is_hidden").await? {
+                db.execute_unprepared(
+                    "ALTER TABLE workspaces ADD COLUMN is_hidden TINYINT NOT NULL DEFAULT 0",
+                )
+                .await?;
+            }
+            db.execute_unprepared(
+                "UPDATE workspaces SET is_default = 1 WHERE name = 'default'",
+            )
+            .await?;
+        } else if backend == DbBackend::Postgres {
             db.execute_unprepared(
                 r#"
-                ALTER TABLE workspaces ADD COLUMN is_default BOOLEAN NOT NULL DEFAULT FALSE;
-                ALTER TABLE workspaces ADD COLUMN is_hidden BOOLEAN NOT NULL DEFAULT FALSE;
+                ALTER TABLE workspaces ADD COLUMN IF NOT EXISTS is_default BOOLEAN NOT NULL DEFAULT FALSE;
+                ALTER TABLE workspaces ADD COLUMN IF NOT EXISTS is_hidden BOOLEAN NOT NULL DEFAULT FALSE;
                 UPDATE workspaces SET is_default = TRUE WHERE name = 'default';
                 "#,
             )
             .await?;
         }
+        
 
         Ok(())
     }

@@ -190,7 +190,7 @@ pub mod models_ffi {
     use crate::entities::reminder::Model as ReminderModel;
     use crate::entities::sync_queue::Model as SyncQueueModel;
     use crate::entities::todo::Model as TodoModel;
-    use crate::entities::user_preference::Model as UserPreferenceModel;
+    use crate::entities::workspace_preferences::Model as UserPreferenceModel;
 
     macro_rules! impl_ffi_passthrough {
         ($t:ty) => {

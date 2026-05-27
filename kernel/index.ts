@@ -11,6 +11,8 @@ import type { Model as SnippetsModel } from "./bindings/snippets";
 import type { Model as SyncQueueModel } from "./bindings/sync_queue";
 import type { Model as TodoModel } from "./bindings/todo";
 import type { Model as UserPreferenceModel } from "./bindings/user_preference";
+import type { Model as UserPreferencesModel } from "./bindings/user_preferences";
+import type { Model as WorkspacePreferencesModel } from "./bindings/workspace_preferences";
 import type { Model as WorkspacesModel } from "./bindings/workspaces";
 
 export interface Bookmark extends BookmarkModel {}
@@ -22,4 +24,6 @@ export interface Snippets extends SnippetsModel {}
 export interface SyncQueue extends SyncQueueModel {}
 export interface Todo extends TodoModel {}
 export interface UserPreference extends UserPreferenceModel {}
+export interface UserPreferences extends UserPreferencesModel {}
+export interface WorkspacePreferences extends WorkspacePreferencesModel {}
 export interface Workspaces extends WorkspacesModel {}

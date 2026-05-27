@@ -20,8 +20,8 @@ impl MigrationTrait for Migration {
         } else {
             db.execute_unprepared(
                 r#"
-                ALTER TABLE workspaces ADD COLUMN is_secured BOOLEAN NOT NULL DEFAULT FALSE;
-                ALTER TABLE workspaces ADD COLUMN password_hash TEXT;
+                ALTER TABLE workspaces ADD COLUMN IF NOT EXISTS is_secured BOOLEAN NOT NULL DEFAULT FALSE;
+                ALTER TABLE workspaces ADD COLUMN IF NOT EXISTS password_hash TEXT;
                 "#,
             )
             .await?;

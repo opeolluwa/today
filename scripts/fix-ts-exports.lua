@@ -104,12 +104,10 @@ end
 local function main()
     local entities_dir = arg[1] or "src/entities/postgres"
 
-    local ok = io.open(entities_dir)
-    if not ok then
+    if os.execute(string.format('test -d "%s"', entities_dir)) ~= 0 then
         io.stderr:write(string.format("error: directory not found: %s\n", entities_dir))
         os.exit(1)
     end
-    ok:close()
 
     local rs_files = glob_rs(entities_dir)
     local changed = {}
