@@ -62,6 +62,5 @@ impl TokenBlacklistRepositoryTrait for TokenBlacklistRepository {
             .await
             .map_err(DatabaseError::from)?;
         Ok(record.is_some())
-        
     }
 }
