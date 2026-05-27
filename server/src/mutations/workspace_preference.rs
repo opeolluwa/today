@@ -2,7 +2,9 @@ use std::sync::Arc;
 
 use almond_kernel::{
     entities,
-    repositories::workspace_preference::{WorkspacePreferenceRepository, WorkspacePreferenceRepositoryExt},
+    repositories::workspace_preference::{
+        WorkspacePreferenceRepository, WorkspacePreferenceRepositoryExt,
+    },
     sync_engine::EntitySyncResult,
 };
 use seaography::{

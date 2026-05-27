@@ -5,5 +5,5 @@ pub mod reminder;
 pub mod snippet;
 pub mod sync_queue;
 pub mod todo;
-pub mod workspace_preferences;
 pub mod workspace;
+pub mod workspace_preferences;

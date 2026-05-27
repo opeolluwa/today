@@ -48,7 +48,7 @@ impl TokenBlacklistRepositoryTrait for TokenBlacklistRepository {
             revoked_at: Set(chrono::Utc::now().fixed_offset()),
         };
 
-        //TODO> FIX 
+        //TODO> FIX
         // record
         //     .insert(self.db_conn.as_ref())
         //     .await
@@ -63,7 +63,7 @@ impl TokenBlacklistRepositoryTrait for TokenBlacklistRepository {
         //     .await
         //     .map_err(DatabaseError::from)?;
         // Ok(record.is_some())
-        // 
+        //
         // TODO: fix
         todo!()
     }
