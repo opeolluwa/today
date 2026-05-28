@@ -98,8 +98,8 @@ const workspaceItems = computed(() => [
             ? "heroicons:lock-closed"
             : "heroicons:check-circle",
         class: isActive
-          ? "font-semibold text-accent-500 dark:text-accent-400"
-          : "text-gray-700 dark:text-gray-300",
+          ? "font-semibold text-accent-500 dark:text-accent-400 capitalize"
+          : "text-gray-700 dark:text-gray-300 capitalize",
         onSelect: () => handleWorkspaceSelect(w.identifier),
       };
     }),

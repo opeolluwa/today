@@ -284,7 +284,7 @@ onMounted(async () => {
               class="bg-transparent outline-none text-xs text-gray-400 dark:text-gray-300 placeholder:text-gray-300 dark:placeholder:text-gray-600 w-20 min-w-0"
               @keydown="onTagKeydown"
               @blur="addTag"
-            >
+            />
           </div>
 
           <!-- Divider -->
@@ -347,6 +347,9 @@ onMounted(async () => {
             :loading="submitting"
             :disabled="!hasChanges"
             @click="handleSave"
+            :ui="{
+              base: 'bg-accent-500 hover:bg-accent-600 disabled:bg-accent-600 disabled:text-gray-100 disabled:cursor-not-allowed py-2',
+            }"
           >
             Save changes
           </UButton>
@@ -355,6 +358,7 @@ onMounted(async () => {
             variant="ghost"
             size="sm"
             :disabled="submitting"
+            :ui="{ base: 'text-accent-500' }"
             @click="router.push('/notes')"
           >
             Discard
