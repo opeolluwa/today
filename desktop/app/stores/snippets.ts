@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
+import gql from "graphql-tag";
+import { apolloClient } from "~/plugins/apollo";
 
 export interface Snippet {
   identifier: string;
@@ -165,10 +167,8 @@ export const useSnippetStore = defineStore("snippets_store", {
         }
       `;
 
-      const { mutate } = useMutation(query, { variables: { input } });
-
       try {
-        const data = await mutate();
+        const data = await apolloClient.mutate({ mutation: query, variables: { input } });
         console.log("Snippets sync response:", JSON.stringify(data, null, 2));
       } catch (error) {
         console.error("Error syncing snippets:", error);

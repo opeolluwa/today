@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
 import { getWorkspaceMeta } from "~/composables/getWorkspaceMeta";
+import gql from "graphql-tag";
+import { apolloClient } from "~/plugins/apollo";
 
 export interface UserPreference {
   identifier: string;
@@ -116,10 +118,8 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
         }
       `;
 
-      const { mutate } = useMutation(query, { variables: { input } });
-
       try {
-        const data = await mutate();
+        const data = await apolloClient.mutate({ mutation: query, variables: { input } });
         console.log(
           "User preferences sync response:",
           JSON.stringify(data, null, 2),

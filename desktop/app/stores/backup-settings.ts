@@ -39,7 +39,8 @@ export const useBackupSettingsStore = defineStore("backup_settings", {
       }
 
       try {
-        const config = await stronghold.getItem<BackupServerConfig>(STRONGHOLD_KEY);
+        const config =
+          await stronghold.getItem<BackupServerConfig>(STRONGHOLD_KEY);
         if (config) {
           this.savedConfig = config;
           this.provider = config.provider;

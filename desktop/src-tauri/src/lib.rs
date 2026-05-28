@@ -7,11 +7,16 @@ mod utils;
 
 use std::sync::Arc;
 
+use almond_kernel::adapters::notifications::CreateNotification;
+use tauri::Listener;
 use tauri::Manager;
 
 use crate::state::alarm::AlarmState;
 use crate::state::app::AppState;
 use crate::state::scheduler::SchedulerState;
+
+// event channels
+// const EVENT_NOTIFICATION_RECEIVED: &str = "notification:received";
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 #[tokio::main]
@@ -33,6 +38,12 @@ pub async fn run() {
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_clipboard_manager::init())
         .setup(|app| {
+            // app.listen(EVENT_NOTIFICATION_RECEIVED, |event| {
+            //     if let Ok(payload) = serde_json::from_str::<CreateNotification>(&event.payload()) {
+            //         println!("downloading {:#?}", payload);
+            //     }
+            // });
+
             let salt_path = app
                 .path()
                 .app_local_data_dir()
@@ -88,10 +99,10 @@ pub async fn run() {
             });
 
             // Spawn the cron-style reminder scheduler after state is managed.
-            let scheduler_handle = app.handle().clone();
-            tauri::async_runtime::spawn(async move {
-                scheduler::run(scheduler_handle, None).await;
-            });
+            // let scheduler_handle = app.handle().clone();
+            // tauri::async_runtime::spawn(async move {
+            //     scheduler::run(scheduler_handle, None).await;
+            // });
 
             Ok(())
         })
@@ -111,6 +122,12 @@ pub async fn run() {
             commands::bookmarks::clear_synced_bookmarks,
             commands::bookmarks::transfer_bookmark,
             commands::bookmarks::update_bookmark,
+            commands::notifications::create_notification,
+            commands::notifications::delete_notification,
+            commands::notifications::get_all_notifications,
+            commands::notifications::get_notification,
+            commands::notifications::get_notifications_by_type,
+            commands::notifications::mark_notification_as_read,
             commands::notes::create_note,
             commands::notes::delete_note,
             commands::notes::duplicate_note,

@@ -9,6 +9,9 @@ import { useReminderStore } from "~/stores/reminder";
 import { useUserPreferenceStore } from "~/stores/workspace-preferences";
 import { useSnippetStore } from "~/stores/snippets";
 import { useRecycleBinStore } from "~/stores/recycle-bin";
+import { useNotificationStore } from "~/stores/notifications";
+import { gql } from "@apollo/client";
+import { apolloClient } from "~/plugins/apollo";
 
 export const useSyncQueueStore = defineStore("sync_queue_store", () => {
   const { isOnline } = useNetwork();
@@ -23,8 +26,7 @@ export const useSyncQueueStore = defineStore("sync_queue_store", () => {
 
     const variables = { name };
 
-    const { mutate } = useMutation(query, { variables });
-    const data = await mutate();
+    const data = await apolloClient.mutate({ mutation: query, variables });
     console.log("Preflight check response:", data);
   }
 
@@ -32,7 +34,7 @@ export const useSyncQueueStore = defineStore("sync_queue_store", () => {
     if (runningSync.value || !isOnline.value) return;
     runningSync.value = true;
     try {
-      await useWorkspacesStore().syncUpstream();
+      // await useWorkspacesStore().syncUpstream();
       await Promise.all([
         useBookmarkStore().syncUpstream(),
         useNoteStore().syncUpstream(),
@@ -42,6 +44,19 @@ export const useSyncQueueStore = defineStore("sync_queue_store", () => {
         useSnippetStore().syncUpstream(),
         useRecycleBinStore().syncUpstream(),
       ]);
+      await useNotificationStore().createNotification({
+        title: "Sync complete",
+        body: "Your data has been synced successfully.",
+        notificationType: "BackupSuccess",
+      });
+    } catch (err) {
+      console.error("Error during sync:", err);
+      await useNotificationStore().createNotification({
+        title: "Sync failed",
+        body:
+          err instanceof Error ? err.message : "An error occurred during sync.",
+        notificationType: "BackupFailed",
+      });
     } finally {
       runningSync.value = false;
     }
