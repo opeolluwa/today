@@ -3,7 +3,7 @@ import { HttpLink } from "@apollo/client/link/http";
 import { createApolloProvider } from "@vue/apollo-option";
 
 const httpLink = new HttpLink({
-  uri: "http://localhost:8000/orchard",
+  uri: "https://orchards.up.railway.app/orchard",
 });
 
 const cache = new InMemoryCache();

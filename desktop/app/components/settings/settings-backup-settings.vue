@@ -1,5 +1,6 @@
 <script setup lang="ts">
 type BackupProvider = "local" | "cloud" | "self-hosted";
+const strongHold = useStronghold();
 
 const backupProvider = ref<BackupProvider>("local");
 const selfHostedApiUrl = ref("");
@@ -30,6 +31,48 @@ const options: {
     icon: "heroicons:server",
   },
 ];
+interface BackupServerConfig {
+  provider: BackupProvider;
+  selfHostedApiUrl: string;
+  selfHostedApiKey: string;
+}
+
+const initialized = ref(false);
+const savedConfig = ref();
+const savedConfigExists = computed(() => Object.values(savedConfig).length > 1);
+const editEnabled = ref(false);
+
+async function saveOrUpdateSyncServer() {
+  const payload = {
+    provider: backupProvider.value,
+    selfHostedApiUrl: selfHostedApiUrl.value,
+    selfHostedApiKey: selfHostedApiKey.value,
+  };
+
+  await strongHold.setItem("sync-server", payload);
+  const savedConfig =
+    await strongHold.getItem<BackupServerConfig>("sync-server");
+  // const parsedConfig = JSON.parse(savedConfig)
+  console.log("Saved sync server config:", savedConfig);
+}
+
+onMounted(async () => {
+  try {
+    await strongHold.init("sync-server");
+    initialized.value = true;
+  } catch (error) {
+    console.error(error);
+  }
+
+  try {
+    const extracted = await strongHold.getItem<
+      BackupServerConfig | null | undefined
+    >("sync-server");
+    savedConfig.value = extracted;
+  } catch (error) {
+    console.log(error); //TODO; push to notification
+  }
+});
 </script>
 
 <template>
@@ -133,7 +176,7 @@ const options: {
             type="url"
             placeholder="https://sync.example.com/api"
             class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent font-mono"
-          >
+          />
           <p class="text-xs text-gray-400 mt-1">
             Base URL of your self-hosted Almond sync server.
           </p>
@@ -148,7 +191,7 @@ const options: {
             type="password"
             placeholder="sk-••••••••••••"
             class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent font-mono"
-          >
+          />
         </div>
         <div class="flex items-center justify-between">
           <button
@@ -159,8 +202,9 @@ const options: {
           </button>
           <button
             class="px-4 py-2 bg-accent-500 text-white text-sm font-medium rounded-lg hover:bg-accent-600 transition-colors"
+            @click="saveOrUpdateSyncServer"
           >
-            Save
+            {{ !savedConfigExists ? "Save" : "Edit" }}
           </button>
         </div>
       </div>
