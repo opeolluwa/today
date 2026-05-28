@@ -3,6 +3,7 @@
 pub mod bookmark;
 pub mod note_categories;
 pub mod notes;
+pub mod notifications;
 pub mod prelude;
 pub mod recycle_bin;
 pub mod reminder;
@@ -18,6 +19,7 @@ seaography::register_entity_modules!([
     bookmark,
     note_categories,
     notes,
+    notifications,
     recycle_bin,
     reminder,
     snippets,
@@ -29,6 +31,7 @@ seaography::register_entity_modules!([
 ]);
 seaography::register_active_enums!([
     sea_orm_active_enums::ItemType,
+    sea_orm_active_enums::NotificationType,
     sea_orm_active_enums::Priority,
     sea_orm_active_enums::Tag,
 ]);

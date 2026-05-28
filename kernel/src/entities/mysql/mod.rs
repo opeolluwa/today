@@ -3,6 +3,7 @@
 pub mod bookmark;
 pub mod note_categories;
 pub mod notes;
+pub mod notifications;
 pub mod prelude;
 pub mod recycle_bin;
 pub mod reminder;

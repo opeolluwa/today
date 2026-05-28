@@ -28,6 +28,8 @@ mod m20260518_000000_remove_email_unique_constraint_from_user_preference;
 mod m20260527_110010_rename_user_preference_table_to_workspace_preference;
 mod m20260527_110634_create_user_preference_table;
 mod m20260527_171026_remove_email_from_workspace_preference;
+mod m20260528_132342_notification;
+mod m20260528_200000_add_workspace_and_is_read_to_notifications;
 
 pub use sea_orm_migration::prelude::*;
 
@@ -71,6 +73,8 @@ impl MigratorTrait for Migrator {
             ),
             Box::new(m20260527_110634_create_user_preference_table::Migration),
             Box::new(m20260527_171026_remove_email_from_workspace_preference::Migration),
+            Box::new(m20260528_132342_notification::Migration),
+            Box::new(m20260528_200000_add_workspace_and_is_read_to_notifications::Migration),
         ]
     }
 }

@@ -7,19 +7,21 @@ mod utils;
 
 use std::sync::Arc;
 
+use almond_kernel::adapters::notifications::CreateNotification;
+use tauri::Listener;
 use tauri::Manager;
 
-// use tauri_plugin_decorum::WebviewWindowExt;
 use crate::state::alarm::AlarmState;
 use crate::state::app::AppState;
 use crate::state::scheduler::SchedulerState;
 
+// event channels
+const EVENT_NOTIFICATION_RECEIVED: &str = "notification:received";
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 #[tokio::main]
 pub async fn run() {
-    let mut builder = tauri::Builder::default()
-        .plugin(tauri_plugin_stronghold::Builder::new(|pass| todo!()).build())
-        .plugin(tauri_plugin_opener::init());
+    let mut builder = tauri::Builder::default().plugin(tauri_plugin_opener::init());
 
     #[cfg(desktop)]
     {
@@ -34,9 +36,22 @@ pub async fn run() {
     builder
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_notification::init())
-        // .plugin(tauri_plugin_decorum::init())
         .plugin(tauri_plugin_clipboard_manager::init())
         .setup(|app| {
+            app.listen(EVENT_NOTIFICATION_RECEIVED, |event| {
+                if let Ok(payload) = serde_json::from_str::<CreateNotification>(&event.payload()) {
+                    println!("downloading {:#?}", payload);
+                }
+            });
+
+            // let salt_path = app
+            //     .path()
+            //     .app_local_data_dir()
+            //     .expect("could not resolve app local data path")
+            //     .join("salt.txt");
+            // app.handle()
+            //     .plugin(tauri_plugin_stronghold::Builder::with_argon2(&salt_path).build())?;
+
             if cfg!(debug_assertions) {
                 app.handle().plugin(
                     tauri_plugin_log::Builder::default()
@@ -44,23 +59,6 @@ pub async fn run() {
                         .build(),
                 )?;
             }
-
-            // let main_window = app.get_webview_window("main").unwrap();
-            // main_window.create_overlay_titlebar().unwrap();
-
-            // Some macOS-specific helpers
-            // #[cfg(target_os = "macos")]
-            // {
-            //     // Set a custom inset to the traffic lights
-            //     main_window.set_traffic_lights_inset(12.0, 16.0).unwrap();
-
-            //     // Make window transparent without privateApi
-            //     main_window.make_transparent().unwrap();
-
-            //     // Set window level
-            //     // NSWindowLevel: https://developer.apple.com/documentation/appkit/nswindowlevel
-            //     // main_window.set_window_level(25).unwrap();
-            // }
 
             let app_handle = app.handle().clone();
 
@@ -101,10 +99,10 @@ pub async fn run() {
             });
 
             // Spawn the cron-style reminder scheduler after state is managed.
-            let scheduler_handle = app.handle().clone();
-            tauri::async_runtime::spawn(async move {
-                scheduler::run(scheduler_handle, None).await;
-            });
+            // let scheduler_handle = app.handle().clone();
+            // tauri::async_runtime::spawn(async move {
+            //     scheduler::run(scheduler_handle, None).await;
+            // });
 
             Ok(())
         })
@@ -124,6 +122,12 @@ pub async fn run() {
             commands::bookmarks::clear_synced_bookmarks,
             commands::bookmarks::transfer_bookmark,
             commands::bookmarks::update_bookmark,
+            commands::notifications::create_notification,
+            commands::notifications::delete_notification,
+            commands::notifications::get_all_notifications,
+            commands::notifications::get_notification,
+            commands::notifications::get_notifications_by_type,
+            commands::notifications::mark_notification_as_read,
             commands::notes::create_note,
             commands::notes::delete_note,
             commands::notes::duplicate_note,

@@ -1,3 +1,4 @@
+use almond_kernel::entities::notifications;
 use axum::{
     extract::{Path, Query, State, WebSocketUpgrade},
     response::Response,
@@ -10,7 +11,6 @@ use crate::{
         pagination::{PaginatedResponse, PaginationParams},
     },
     dto::common::RowCount,
-    entities::notifications,
     errors::service_error::ServiceError,
     response::ApiResponse,
     services::notification_service::{NotificationService, NotificationServiceExt},

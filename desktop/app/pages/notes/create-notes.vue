@@ -183,6 +183,9 @@ onBeforeRouteLeave(async () => {
         :loading="submitting"
         :disabled="!hasContent"
         class="mb-2"
+        :ui="{
+          base: 'bg-accent-500 hover:bg-accent-600 disabled:bg-accent-600 disabled:text-gray-100 disabled:cursor-not-allowed py-2',
+        }"
         @click="handleSave"
       >
         Save note
@@ -192,6 +195,9 @@ onBeforeRouteLeave(async () => {
         variant="ghost"
         size="sm"
         :disabled="submitting"
+        :ui="{
+          base: 'text-accent-500 hover:text-accent-600 disabled:text-accent-600 disabled:text-gray-100 disabled:cursor-not-allowed py-2',
+        }"
         @click="router.push('/notes')"
       >
         Discard

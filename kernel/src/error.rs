@@ -29,6 +29,9 @@ pub enum KernelError {
     #[error("Reminder does not exists ")]
     ReminderNotFound(String),
 
+    #[error("Notification does not exist: {0}")]
+    NotificationNotFound(String),
+
     #[error("Failed to read download Directory")]
     DownloadDirNotFound,
 

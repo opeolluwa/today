@@ -9,29 +9,31 @@ use serde::{Deserialize, Serialize};
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub identifier: Uuid,
-    pub subject: String,
+    pub title: String,
     pub body: String,
+    #[sea_orm(column_type = "Text")]
+    pub notification_type: String,
+    pub is_read: bool,
+    pub workspace_identifier: Option<Uuid>,
     pub created_at: DateTimeWithTimeZone,
-    pub updated_at: Option<DateTimeWithTimeZone>,
-    pub is_read: Option<bool>,
-    pub user_identifier: Option<Uuid>,
+    pub updated_at: DateTimeWithTimeZone,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
     #[sea_orm(
-        belongs_to = "super::users::Entity",
-        from = "Column::UserIdentifier",
-        to = "super::users::Column::Identifier",
-        on_update = "Cascade",
+        belongs_to = "super::workspaces::Entity",
+        from = "Column::WorkspaceIdentifier",
+        to = "super::workspaces::Column::Identifier",
+        on_update = "NoAction",
         on_delete = "Cascade"
     )]
-    Users,
+    Workspaces,
 }
 
-impl Related<super::users::Entity> for Entity {
+impl Related<super::workspaces::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::Users.def()
+        Relation::Workspaces.def()
     }
 }
 

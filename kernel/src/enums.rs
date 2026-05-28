@@ -44,6 +44,41 @@ impl fmt::Display for Tag {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub enum NotificationType {
+    BackupFailed,
+    BackupSuccess,
+    WorkspaceInviteReceived,
+    WorkspaceInviteAccepted,
+    WorkspaceInviteDeclined,
+    ItemShared,
+    ItemUnshared,
+    ItemUpdated,
+    ItemDeleted,
+    ItemAccessGranted,
+    ItemAccessRevoked,
+    Generic,
+}
+
+impl fmt::Display for NotificationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            NotificationType::BackupFailed => write!(f, "backup_failed"),
+            NotificationType::BackupSuccess => write!(f, "backup_success"),
+            NotificationType::WorkspaceInviteReceived => write!(f, "workspace_invite_received"),
+            NotificationType::WorkspaceInviteAccepted => write!(f, "workspace_invite_accepted"),
+            NotificationType::WorkspaceInviteDeclined => write!(f, "workspace_invite_declined"),
+            NotificationType::ItemShared => write!(f, "item_shared"),
+            NotificationType::ItemUnshared => write!(f, "item_unshared"),
+            NotificationType::ItemUpdated => write!(f, "item_updated"),
+            NotificationType::ItemDeleted => write!(f, "item_deleted"),
+            NotificationType::ItemAccessGranted => write!(f, "item_access_granted"),
+            NotificationType::ItemAccessRevoked => write!(f, "item_access_revoked"),
+            NotificationType::Generic => write!(f, "generic"),
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Priority {
     High,
     Medium,

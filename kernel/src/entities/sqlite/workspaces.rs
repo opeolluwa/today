@@ -7,12 +7,12 @@ use serde::{Deserialize, Serialize};
 #[sea_orm(table_name = "workspaces")]
 #[serde(rename_all = "camelCase")]
 pub struct Model {
+    #[sea_orm(primary_key, auto_increment = false)]
+    pub identifier: Uuid,
     pub name: String,
     pub description: String,
     pub created_at: DateTimeWithTimeZone,
     pub updated_at: DateTimeWithTimeZone,
-    #[sea_orm(primary_key, auto_increment = false)]
-    pub identifier: Uuid,
     pub is_default: bool,
     pub is_hidden: bool,
     pub is_secured: bool,
@@ -26,6 +26,8 @@ pub enum Relation {
     Bookmark,
     #[sea_orm(has_many = "super::notes::Entity")]
     Notes,
+    #[sea_orm(has_many = "super::notifications::Entity")]
+    Notifications,
     #[sea_orm(has_many = "super::recycle_bin::Entity")]
     RecycleBin,
     #[sea_orm(has_many = "super::reminder::Entity")]
@@ -47,6 +49,12 @@ impl Related<super::bookmark::Entity> for Entity {
 impl Related<super::notes::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::Notes.def()
+    }
+}
+
+impl Related<super::notifications::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Notifications.def()
     }
 }
 

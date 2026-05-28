@@ -1,10 +1,6 @@
 <script setup lang="ts">
 type BackupProvider = "local" | "cloud" | "self-hosted";
 
-const backupProvider = ref<BackupProvider>("local");
-const selfHostedApiUrl = ref("");
-const selfHostedApiKey = ref("");
-
 const options: {
   key: BackupProvider;
   label: string;
@@ -30,6 +26,10 @@ const options: {
     icon: "heroicons:server",
   },
 ];
+
+const backupStore = useBackupSettingsStore();
+
+onMounted(() => backupStore.init());
 </script>
 
 <template>
@@ -51,16 +51,16 @@ const options: {
           :key="opt.key"
           class="flex items-start gap-3 p-3 rounded-lg border transition-colors text-left"
           :class="
-            backupProvider === opt.key
+            backupStore.provider === opt.key
               ? 'border-accent-400 bg-accent-50 dark:bg-accent-950 dark:border-accent-600'
               : 'border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
           "
-          @click="backupProvider = opt.key"
+          @click="backupStore.provider = opt.key"
         >
           <div
             class="mt-0.5 size-8 rounded-md flex items-center justify-center shrink-0"
             :class="
-              backupProvider === opt.key
+              backupStore.provider === opt.key
                 ? 'bg-accent-100 dark:bg-accent-900'
                 : 'bg-gray-100 dark:bg-gray-700'
             "
@@ -69,7 +69,7 @@ const options: {
               :name="opt.icon"
               class="size-4"
               :class="
-                backupProvider === opt.key
+                backupStore.provider === opt.key
                   ? 'text-accent-600 dark:text-accent-400'
                   : 'text-gray-500 dark:text-gray-400'
               "
@@ -79,7 +79,7 @@ const options: {
             <p
               class="text-sm font-medium"
               :class="
-                backupProvider === opt.key
+                backupStore.provider === opt.key
                   ? 'text-accent-700 dark:text-accent-300'
                   : 'text-gray-700 dark:text-gray-200'
               "
@@ -89,7 +89,7 @@ const options: {
             <p class="text-xs text-gray-400 mt-0.5">{{ opt.desc }}</p>
           </div>
           <UIcon
-            v-if="backupProvider === opt.key"
+            v-if="backupStore.provider === opt.key"
             name="heroicons:check-circle"
             class="size-4 text-accent-500 shrink-0 mt-1"
           />
@@ -98,7 +98,7 @@ const options: {
 
       <!-- Almond Cloud CTA -->
       <div
-        v-if="backupProvider === 'cloud'"
+        v-if="backupStore.provider === 'cloud'"
         class="rounded-lg bg-accent-50 dark:bg-accent-950 border border-accent-100 dark:border-accent-800 p-4 flex items-center justify-between gap-4"
       >
         <div>
@@ -120,7 +120,7 @@ const options: {
 
       <!-- Self Hosted config -->
       <div
-        v-else-if="backupProvider === 'self-hosted'"
+        v-else-if="backupStore.provider === 'self-hosted'"
         class="flex flex-col gap-4"
       >
         <div>
@@ -129,7 +129,7 @@ const options: {
             >API Endpoint</label
           >
           <input
-            v-model="selfHostedApiUrl"
+            v-model="backupStore.selfHostedApiUrl"
             type="url"
             placeholder="https://sync.example.com/api"
             class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent font-mono"
@@ -144,7 +144,7 @@ const options: {
             >API Key</label
           >
           <input
-            v-model="selfHostedApiKey"
+            v-model="backupStore.selfHostedApiKey"
             type="password"
             placeholder="sk-••••••••••••"
             class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent font-mono"
@@ -154,13 +154,14 @@ const options: {
           <button
             class="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-accent-600 dark:hover:text-accent-400 transition-colors"
           >
-            <UIcon name="heroicons:signal" class="size-3.5" />
+            <UIcon name="heroicons:signal" class="size-5" />
             Test connection
           </button>
           <button
             class="px-4 py-2 bg-accent-500 text-white text-sm font-medium rounded-lg hover:bg-accent-600 transition-colors"
+            @click="backupStore.save()"
           >
-            Save
+            {{ !backupStore.savedConfigExists ? "Save" : "Update" }}
           </button>
         </div>
       </div>

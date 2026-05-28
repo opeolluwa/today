@@ -2,10 +2,10 @@ use std::sync::Arc;
 
 use almond_kernel::{
     repositories::{
-        bookmarks::BookmarkRepository, notes::NotesRepository, prelude::*,
-        recycle_bin::RecycleBinRepository, reminder::ReminderRepository,
-        snippets::SnippetRepository, sync_queue::SyncQueueRepository, todo::TodoRepository,
-        user_preferences::UserPreferencesRepository,
+        bookmarks::BookmarkRepository, notes::NotesRepository,
+        notifications::NotificationRepository, prelude::*, recycle_bin::RecycleBinRepository,
+        reminder::ReminderRepository, snippets::SnippetRepository, sync_queue::SyncQueueRepository,
+        todo::TodoRepository, user_preferences::UserPreferencesRepository,
         user_preferences::UserPreferencesRepositoryExt, workspace::WorkspaceRepository,
         workspace_preferences::WorkspacePreferenceRepository,
     },
@@ -16,6 +16,7 @@ use almond_kernel::{
 pub struct AppState {
     pub bookmark_repository: BookmarkRepository,
     pub notes_repository: NotesRepository,
+    pub notification_repository: NotificationRepository,
     pub recycle_bin_repository: RecycleBinRepository,
     pub reminder_repository: ReminderRepository,
     pub snippet_repository: SnippetRepository,
@@ -30,6 +31,7 @@ impl AppState {
     pub async fn new(conn: Arc<DatabaseConnection>) -> Self {
         let bookmark_repository = BookmarkRepository::new(conn.clone());
         let notes_repository = NotesRepository::new(conn.clone());
+        let notification_repository = NotificationRepository::new(conn.clone());
         let recycle_bin_repository = RecycleBinRepository::new(conn.clone());
         let reminder_repository = ReminderRepository::new(conn.clone());
         let snippet_repository = SnippetRepository::new(conn.clone());
@@ -42,6 +44,7 @@ impl AppState {
         AppState {
             bookmark_repository,
             notes_repository,
+            notification_repository,
             recycle_bin_repository,
             reminder_repository,
             snippet_repository,
