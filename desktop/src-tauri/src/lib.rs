@@ -16,7 +16,7 @@ use crate::state::app::AppState;
 use crate::state::scheduler::SchedulerState;
 
 // event channels
-// const EVENT_NOTIFICATION_RECEIVED: &str = "notification:received";
+const EVENT_NOTIFICATION_RECEIVED: &str = "notification:received";
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 #[tokio::main]
@@ -38,11 +38,11 @@ pub async fn run() {
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_clipboard_manager::init())
         .setup(|app| {
-            // app.listen(EVENT_NOTIFICATION_RECEIVED, |event| {
-            //     if let Ok(payload) = serde_json::from_str::<CreateNotification>(&event.payload()) {
-            //         println!("downloading {:#?}", payload);
-            //     }
-            // });
+            app.listen(EVENT_NOTIFICATION_RECEIVED, |event| {
+                if let Ok(payload) = serde_json::from_str::<CreateNotification>(&event.payload()) {
+                    println!("downloading {:#?}", payload);
+                }
+            });
 
             let salt_path = app
                 .path()

@@ -1,7 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import gql from "graphql-tag";
 import { defineStore } from "pinia";
-import { apolloClient } from "~/plugins/apollo";
 
 export type BookmarkTag = "development" | "design" | "research" | "inspiration";
 
@@ -172,11 +170,10 @@ export const useBookmarkStore = defineStore("bookmark_store", {
         }
       `;
 
+      const { mutate } = useMutation(query, { variables: { input } });
+
       try {
-        const data = await apolloClient.mutate({
-          mutation: query,
-          variables: { input },
-        });
+        const data = await mutate();
         console.log(
           "Bookmarks checks response:",
           JSON.stringify(data, null, 2),

@@ -1,7 +1,5 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
-import gql from "graphql-tag";
-import { apolloClient } from "~/plugins/apollo";
 
 export type RecycleBinItemType =
   | "note"
@@ -128,11 +126,10 @@ export const useRecycleBinStore = defineStore("recycle_bin_store", {
         }
       `;
 
+      const { mutate } = useMutation(query, { variables: { input } });
+
       try {
-        const data = await apolloClient.mutate({
-          mutation: query,
-          variables: { input },
-        });
+        const data = await mutate();
         console.log(
           "Recycle bin sync response:",
           JSON.stringify(data, null, 2),

@@ -11,7 +11,6 @@ import { useSnippetStore } from "~/stores/snippets";
 import { useRecycleBinStore } from "~/stores/recycle-bin";
 import { useNotificationStore } from "~/stores/notifications";
 import { gql } from "@apollo/client";
-import { apolloClient } from "~/plugins/apollo";
 
 export const useSyncQueueStore = defineStore("sync_queue_store", () => {
   const { isOnline } = useNetwork();
@@ -26,7 +25,8 @@ export const useSyncQueueStore = defineStore("sync_queue_store", () => {
 
     const variables = { name };
 
-    const data = await apolloClient.mutate({ mutation: query, variables });
+    const { mutate } = useMutation(query, { variables });
+    const data = await mutate();
     console.log("Preflight check response:", data);
   }
 
@@ -34,7 +34,7 @@ export const useSyncQueueStore = defineStore("sync_queue_store", () => {
     if (runningSync.value || !isOnline.value) return;
     runningSync.value = true;
     try {
-      // await useWorkspacesStore().syncUpstream();
+      await useWorkspacesStore().syncUpstream();
       await Promise.all([
         useBookmarkStore().syncUpstream(),
         useNoteStore().syncUpstream(),

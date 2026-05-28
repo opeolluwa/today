@@ -1,7 +1,5 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
-import gql from "graphql-tag";
-import { apolloClient } from "~/plugins/apollo";
 
 type SyncResult = {
   success: boolean;
@@ -180,11 +178,10 @@ export const useNoteStore = defineStore("notes_store", {
         }
       `;
 
+      const { mutate } = useMutation(query, { variables: { input } });
+
       try {
-        const data = await apolloClient.mutate({
-          mutation: query,
-          variables: { input },
-        });
+        const data = await mutate();
         console.log("Notes checks response:", JSON.stringify(data, null, 2));
       } catch (error) {
         console.error("Error syncing notes:", error);
