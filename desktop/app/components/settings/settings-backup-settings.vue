@@ -1,10 +1,5 @@
 <script setup lang="ts">
 type BackupProvider = "local" | "cloud" | "self-hosted";
-const strongHold = useStronghold();
-
-const backupProvider = ref<BackupProvider>("local");
-const selfHostedApiUrl = ref("");
-const selfHostedApiKey = ref("");
 
 const options: {
   key: BackupProvider;
@@ -31,48 +26,10 @@ const options: {
     icon: "heroicons:server",
   },
 ];
-interface BackupServerConfig {
-  provider: BackupProvider;
-  selfHostedApiUrl: string;
-  selfHostedApiKey: string;
-}
 
-const initialized = ref(false);
-const savedConfig = ref();
-const savedConfigExists = computed(() => Object.values(savedConfig).length > 1);
-const editEnabled = ref(false);
+const backupStore = useBackupSettingsStore();
 
-async function saveOrUpdateSyncServer() {
-  const payload = {
-    provider: backupProvider.value,
-    selfHostedApiUrl: selfHostedApiUrl.value,
-    selfHostedApiKey: selfHostedApiKey.value,
-  };
-
-  await strongHold.setItem("sync-server", payload);
-  const savedConfig =
-    await strongHold.getItem<BackupServerConfig>("sync-server");
-  // const parsedConfig = JSON.parse(savedConfig)
-  console.log("Saved sync server config:", savedConfig);
-}
-
-onMounted(async () => {
-  try {
-    await strongHold.init("sync-server");
-    initialized.value = true;
-  } catch (error) {
-    console.error(error);
-  }
-
-  try {
-    const extracted = await strongHold.getItem<
-      BackupServerConfig | null | undefined
-    >("sync-server");
-    savedConfig.value = extracted;
-  } catch (error) {
-    console.log(error); //TODO; push to notification
-  }
-});
+onMounted(() => backupStore.init());
 </script>
 
 <template>
@@ -94,16 +51,16 @@ onMounted(async () => {
           :key="opt.key"
           class="flex items-start gap-3 p-3 rounded-lg border transition-colors text-left"
           :class="
-            backupProvider === opt.key
+            backupStore.provider === opt.key
               ? 'border-accent-400 bg-accent-50 dark:bg-accent-950 dark:border-accent-600'
               : 'border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
           "
-          @click="backupProvider = opt.key"
+          @click="backupStore.provider = opt.key"
         >
           <div
             class="mt-0.5 size-8 rounded-md flex items-center justify-center shrink-0"
             :class="
-              backupProvider === opt.key
+              backupStore.provider === opt.key
                 ? 'bg-accent-100 dark:bg-accent-900'
                 : 'bg-gray-100 dark:bg-gray-700'
             "
@@ -112,7 +69,7 @@ onMounted(async () => {
               :name="opt.icon"
               class="size-4"
               :class="
-                backupProvider === opt.key
+                backupStore.provider === opt.key
                   ? 'text-accent-600 dark:text-accent-400'
                   : 'text-gray-500 dark:text-gray-400'
               "
@@ -122,7 +79,7 @@ onMounted(async () => {
             <p
               class="text-sm font-medium"
               :class="
-                backupProvider === opt.key
+                backupStore.provider === opt.key
                   ? 'text-accent-700 dark:text-accent-300'
                   : 'text-gray-700 dark:text-gray-200'
               "
@@ -132,7 +89,7 @@ onMounted(async () => {
             <p class="text-xs text-gray-400 mt-0.5">{{ opt.desc }}</p>
           </div>
           <UIcon
-            v-if="backupProvider === opt.key"
+            v-if="backupStore.provider === opt.key"
             name="heroicons:check-circle"
             class="size-4 text-accent-500 shrink-0 mt-1"
           />
@@ -141,7 +98,7 @@ onMounted(async () => {
 
       <!-- Almond Cloud CTA -->
       <div
-        v-if="backupProvider === 'cloud'"
+        v-if="backupStore.provider === 'cloud'"
         class="rounded-lg bg-accent-50 dark:bg-accent-950 border border-accent-100 dark:border-accent-800 p-4 flex items-center justify-between gap-4"
       >
         <div>
@@ -163,7 +120,7 @@ onMounted(async () => {
 
       <!-- Self Hosted config -->
       <div
-        v-else-if="backupProvider === 'self-hosted'"
+        v-else-if="backupStore.provider === 'self-hosted'"
         class="flex flex-col gap-4"
       >
         <div>
@@ -172,7 +129,7 @@ onMounted(async () => {
             >API Endpoint</label
           >
           <input
-            v-model="selfHostedApiUrl"
+            v-model="backupStore.selfHostedApiUrl"
             type="url"
             placeholder="https://sync.example.com/api"
             class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent font-mono"
@@ -187,7 +144,7 @@ onMounted(async () => {
             >API Key</label
           >
           <input
-            v-model="selfHostedApiKey"
+            v-model="backupStore.selfHostedApiKey"
             type="password"
             placeholder="sk-••••••••••••"
             class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent font-mono"
@@ -197,14 +154,14 @@ onMounted(async () => {
           <button
             class="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-accent-600 dark:hover:text-accent-400 transition-colors"
           >
-            <UIcon name="heroicons:signal" class="size-3.5" />
+            <UIcon name="heroicons:signal" class="size-5" />
             Test connection
           </button>
           <button
             class="px-4 py-2 bg-accent-500 text-white text-sm font-medium rounded-lg hover:bg-accent-600 transition-colors"
-            @click="saveOrUpdateSyncServer"
+            @click="backupStore.save()"
           >
-            {{ !savedConfigExists ? "Save" : "Edit" }}
+            {{ !backupStore.savedConfigExists ? "Save" : "Update" }}
           </button>
         </div>
       </div>

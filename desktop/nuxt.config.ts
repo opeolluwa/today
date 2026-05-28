@@ -30,13 +30,13 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
   ],
 
-  apollo: {
-    clients: {
-      default: {
-        httpEndpoint: "http://localhost:8000/orchard",
-      },
-    },
-  },
+  // apollo: {
+  //   clients: {
+  //     default: {
+  //       httpEndpoint: "http://localhost:8000/orchard",
+  //     },
+  //   },
+  // },
 
   icon: {
     serverBundle: {

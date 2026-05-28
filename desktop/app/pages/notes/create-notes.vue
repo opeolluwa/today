@@ -163,7 +163,7 @@ onBeforeRouteLeave(async () => {
             class="bg-transparent outline-none text-xs text-gray-400 dark:text-gray-500 placeholder:text-gray-300 dark:placeholder:text-gray-400 w-20 min-w-0"
             @keydown="onTagKeydown"
             @blur="addTag"
-          >
+          />
         </div>
 
         <!-- Editor -->
@@ -184,6 +184,9 @@ onBeforeRouteLeave(async () => {
         :disabled="!hasContent"
         class="mb-2"
         @click="handleSave"
+        :ui="{
+          base: 'bg-accent-500 hover:bg-accent-600 disabled:bg-accent-600 disabled:text-gray-100 disabled:cursor-not-allowed py-2',
+        }"
       >
         Save note
       </UButton>
@@ -192,6 +195,9 @@ onBeforeRouteLeave(async () => {
         variant="ghost"
         size="sm"
         :disabled="submitting"
+        :ui="{
+          base: 'text-accent-500 hover:text-accent-600 disabled:text-accent-600 disabled:text-gray-100 disabled:cursor-not-allowed py-2',
+        }"
         @click="router.push('/notes')"
       >
         Discard

@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import type { Client} from "@tauri-apps/plugin-stronghold";
+import type { Client } from "@tauri-apps/plugin-stronghold";
 import { Stronghold } from "@tauri-apps/plugin-stronghold";
 import { appDataDir } from "@tauri-apps/api/path";
 
