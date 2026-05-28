@@ -176,7 +176,7 @@ onMounted(async () => {
             type="url"
             placeholder="https://sync.example.com/api"
             class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent font-mono"
-          />
+          >
           <p class="text-xs text-gray-400 mt-1">
             Base URL of your self-hosted Almond sync server.
           </p>
@@ -191,7 +191,7 @@ onMounted(async () => {
             type="password"
             placeholder="sk-••••••••••••"
             class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent font-mono"
-          />
+          >
         </div>
         <div class="flex items-center justify-between">
           <button

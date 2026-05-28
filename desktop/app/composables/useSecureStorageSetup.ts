@@ -1,5 +1,6 @@
 import { ref } from "vue";
-import  { Client, Stronghold } from "@tauri-apps/plugin-stronghold";
+import type { Client} from "@tauri-apps/plugin-stronghold";
+import { Stronghold } from "@tauri-apps/plugin-stronghold";
 import { appDataDir } from "@tauri-apps/api/path";
 
 const VAULT_FILE = "vault.hold";
@@ -62,7 +63,6 @@ export function useStronghold() {
     }
 
     const decoded = new TextDecoder().decode(new Uint8Array(data));
-
 
     return JSON.parse(decoded);
   };
