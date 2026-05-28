@@ -33,10 +33,7 @@ pub(crate) trait NotificationRepositoryExt {
         notification: &CreateNotification,
     ) -> Result<notifications::Model, DatabaseError>;
 
-    async fn mark_read(
-        &self,
-        notification_identifier: &Uuid,
-    ) -> Result<(), DatabaseError>;
+    async fn mark_read(&self, notification_identifier: &Uuid) -> Result<(), DatabaseError>;
 
     async fn fetch_all(
         &self,
@@ -84,10 +81,7 @@ impl NotificationRepositoryExt for NotificationRepository {
         })
     }
 
-    async fn mark_read(
-        &self,
-        notification_identifier: &Uuid,
-    ) -> Result<(), DatabaseError> {
+    async fn mark_read(&self, notification_identifier: &Uuid) -> Result<(), DatabaseError> {
         let Some(notification) = self.fetch_one(notification_identifier).await else {
             return Err(DatabaseError::RecordNotFound);
         };

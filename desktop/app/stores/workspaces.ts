@@ -211,7 +211,7 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
       await invoke("clear_synced_workspaces", { identifiers });
     },
 
-  async resolveWorkspace(identifier: string) {
+    async resolveWorkspace(identifier: string) {
       if (!identifier || resolvedWorkspaceIds.has(identifier)) return;
 
       const { client } = useApolloClient();

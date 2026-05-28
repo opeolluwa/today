@@ -1,13 +1,12 @@
 use std::sync::Arc;
 
+use almond_kernel::entities::notifications;
 use axum::{
     extract::ws::{Message, WebSocket},
     response::Response,
 };
 use sea_orm::DatabaseConnection;
 use uuid::Uuid;
-
-use almond_kernel::entities::notifications;
 
 use crate::{
     adapters::{
@@ -143,10 +142,7 @@ impl NotificationServiceExt for NotificationService {
         _claims: &Claims,
         pagination: &PaginationParams,
     ) -> Result<PaginatedResponse<Vec<notifications::Model>>, ServiceError> {
-        let records = self
-            .repository
-            .fetch_all(pagination)
-            .await?;
+        let records = self.repository.fetch_all(pagination).await?;
 
         let paginated_result = PaginatedResponse {
             records: records.notifications,
@@ -159,10 +155,7 @@ impl NotificationServiceExt for NotificationService {
     }
 
     async fn count_unread(&self, _claims: &Claims) -> Result<RowCount, ServiceError> {
-        let result = self
-            .repository
-            .count_unread()
-            .await?;
+        let result = self.repository.count_unread().await?;
 
         Ok(result)
     }
@@ -172,9 +165,7 @@ impl NotificationServiceExt for NotificationService {
         _claims: &Claims,
         notification_identifier: &Uuid,
     ) -> Result<(), ServiceError> {
-        self.repository
-            .mark_read(notification_identifier)
-            .await?;
+        self.repository.mark_read(notification_identifier).await?;
         Ok(())
     }
 }

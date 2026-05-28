@@ -1,10 +1,9 @@
+use almond_kernel::entities::notifications;
 use axum::{
     extract::{Path, Query, State, WebSocketUpgrade},
     response::Response,
 };
 use uuid::Uuid;
-
-use almond_kernel::entities::notifications;
 
 use crate::{
     adapters::{
