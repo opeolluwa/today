@@ -23,6 +23,37 @@ pub enum ItemType {
 #[derive(
     Debug, Clone, PartialEq, Eq, EnumIter, DeriveActiveEnum, Serialize, Deserialize, ts_rs :: TS,
 )]
+#[sea_orm(rs_type = "String", db_type = "Enum", enum_name = "notification_type")]
+#[ts(export, export_to = "sea_orm_active_enums.ts")]
+pub enum NotificationType {
+    #[sea_orm(string_value = "backup_failed")]
+    BackupFailed,
+    #[sea_orm(string_value = "backup_success")]
+    BackupSuccess,
+    #[sea_orm(string_value = "workspace_invite_received")]
+    WorkspaceInviteReceived,
+    #[sea_orm(string_value = "workspace_invite_accepted")]
+    WorkspaceInviteAccepted,
+    #[sea_orm(string_value = "workspace_invite_declined")]
+    WorkspaceInviteDeclined,
+    #[sea_orm(string_value = "item_shared")]
+    ItemShared,
+    #[sea_orm(string_value = "item_unshared")]
+    ItemUnshared,
+    #[sea_orm(string_value = "item_updated")]
+    ItemUpdated,
+    #[sea_orm(string_value = "item_deleted")]
+    ItemDeleted,
+    #[sea_orm(string_value = "item_access_granted")]
+    ItemAccessGranted,
+    #[sea_orm(string_value = "item_access_revoked")]
+    ItemAccessRevoked,
+    #[sea_orm(string_value = "generic")]
+    Generic,
+}
+#[derive(
+    Debug, Clone, PartialEq, Eq, EnumIter, DeriveActiveEnum, Serialize, Deserialize, ts_rs :: TS,
+)]
 #[sea_orm(rs_type = "String", db_type = "Enum", enum_name = "priority")]
 #[ts(export, export_to = "sea_orm_active_enums.ts")]
 pub enum Priority {

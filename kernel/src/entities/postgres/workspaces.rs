@@ -27,6 +27,8 @@ pub enum Relation {
     Bookmark,
     #[sea_orm(has_many = "super::notes::Entity")]
     Notes,
+    #[sea_orm(has_many = "super::notifications::Entity")]
+    Notifications,
     #[sea_orm(has_many = "super::recycle_bin::Entity")]
     RecycleBin,
     #[sea_orm(has_many = "super::reminder::Entity")]
@@ -48,6 +50,12 @@ impl Related<super::bookmark::Entity> for Entity {
 impl Related<super::notes::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::Notes.def()
+    }
+}
+
+impl Related<super::notifications::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Notifications.def()
     }
 }
 
@@ -89,6 +97,8 @@ pub enum RelatedEntity {
     Bookmark,
     #[sea_orm(entity = "super::notes::Entity")]
     Notes,
+    #[sea_orm(entity = "super::notifications::Entity")]
+    Notifications,
     #[sea_orm(entity = "super::recycle_bin::Entity")]
     RecycleBin,
     #[sea_orm(entity = "super::reminder::Entity")]

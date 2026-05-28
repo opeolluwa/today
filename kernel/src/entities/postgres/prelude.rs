@@ -3,6 +3,7 @@
 pub use super::bookmark::Entity as Bookmark;
 pub use super::note_categories::Entity as NoteCategories;
 pub use super::notes::Entity as Notes;
+pub use super::notifications::Entity as Notifications;
 pub use super::recycle_bin::Entity as RecycleBin;
 pub use super::reminder::Entity as Reminder;
 pub use super::snippets::Entity as Snippets;

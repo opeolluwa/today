@@ -2,6 +2,20 @@
 
 export type ItemType = "Todo" | "Note" | "Reminder" | "Snippet" | "Bookmark";
 
+export type NotificationType =
+  | "BackupFailed"
+  | "BackupSuccess"
+  | "WorkspaceInviteReceived"
+  | "WorkspaceInviteAccepted"
+  | "WorkspaceInviteDeclined"
+  | "ItemShared"
+  | "ItemUnshared"
+  | "ItemUpdated"
+  | "ItemDeleted"
+  | "ItemAccessGranted"
+  | "ItemAccessRevoked"
+  | "Generic";
+
 export type Priority = "High" | "Medium" | "Low";
 
 export type Tag = "Development" | "Inspiration" | "Design" | "Research";
