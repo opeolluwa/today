@@ -55,10 +55,13 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
     async createPreference(
       payload: CreateUserPreferencePayload,
     ): Promise<UserPreference> {
-      const created = await invoke<UserPreference>("create_workspace_preference", {
-        preference: payload,
-        meta: await getWorkspaceMeta(),
-      });
+      const created = await invoke<UserPreference>(
+        "create_workspace_preference",
+        {
+          preference: payload,
+          meta: await getWorkspaceMeta(),
+        },
+      );
       this.preference = created;
       return created;
     },
@@ -66,11 +69,14 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
     async updatePreference(
       payload: UpdateUserPreferencePayload,
     ): Promise<UserPreference> {
-      const updated = await invoke<UserPreference>("update_workspace_preference", {
-        identifier: this.preference!.identifier,
-        preference: payload,
-        meta: await getWorkspaceMeta(),
-      });
+      const updated = await invoke<UserPreference>(
+        "update_workspace_preference",
+        {
+          identifier: this.preference!.identifier,
+          preference: payload,
+          meta: await getWorkspaceMeta(),
+        },
+      );
       this.preference = updated;
       return updated;
     },

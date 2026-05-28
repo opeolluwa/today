@@ -1,8 +1,8 @@
 use almond_kernel::{
     adapters::meta::RequestMeta,
     entities::workspace_preferences,
-    repositories::workspace_preferences::WorkspacePreferenceRepositoryExt,
     repositories::workspace_manager::{DuplicateRecord, TransferRecord},
+    repositories::workspace_preferences::WorkspacePreferenceRepositoryExt,
 };
 use tauri::State;
 use uuid::Uuid;
