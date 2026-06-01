@@ -186,5 +186,6 @@ h6.notes_heading {
 }
 
 .dm-editor {
-  height: 50vh;
+  height: 65vh;
+  overflow: scroll;
 }
