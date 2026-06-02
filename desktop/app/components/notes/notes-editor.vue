@@ -4,7 +4,7 @@ import { Domternal } from "@domternal/vue";
 import DOMPurify from "dompurify";
 import { Details } from "@domternal/extension-details";
 import { CodeBlockLowlight } from "@domternal/extension-code-block-lowlight";
-import { createLowlight, common } from "lowlight";
+import { createLowlight, all } from "lowlight";
 import {
   StarterKit,
   BubbleMenu,
@@ -20,6 +20,7 @@ import {
   BulletList,
   OrderedList,
   Link,
+  Placeholder,
 } from "@domternal/core";
 import { Table } from "@domternal/extension-table";
 import { Image } from "@domternal/extension-image";
@@ -28,10 +29,18 @@ import {
   emojis,
   createEmojiSuggestionRenderer,
 } from "@domternal/extension-emoji";
+import {
+  BlockContextMenu,
+  BlockHandle,
+  FloatingMenu,
+  KeyboardReorder,
+  SlashCommand,
+  SmartPaste,
+} from "@domternal/extension-block-menu";
 
 const colorMode = useColorMode();
 const isDark = computed(() => colorMode.value === "dark");
-const lowlight = createLowlight(common);
+const lowlight = createLowlight(all);
 const dmVars = computed(() =>
   isDark.value
     ? {
@@ -72,6 +81,11 @@ const extensions = [
   TextStyle,
   Code,
   TextAlign,
+  BlockHandle.configure({ nested: true }),
+  BlockContextMenu,
+  SlashCommand,
+  SmartPaste,
+  KeyboardReorder,
   Heading.configure({
     levels: [1, 2, 3, 4, 5, 6],
     HTMLAttributes: { class: "notes_heading" },
@@ -88,6 +102,10 @@ const extensions = [
     linkOnPaste: true,
     defaultProtocol: "https",
   }),
+  FloatingMenu.configure({
+    element: document.getElementById("floating-menu")!,
+    requireExplicitTrigger: false,
+  }),
   Image.configure({
     //TODO: replace with actual upload handler that uploads to server and returns URL
     uploadHandler: async (file) => {
@@ -96,6 +114,15 @@ const extensions = [
       const res = await fetch("/api/upload", { method: "POST", body: form });
       const { url } = await res.json();
       return url;
+    },
+  }),
+
+  Placeholder.configure({
+    placeholder: ({ node }) => {
+      if (node.type.name === "heading") return "Enter a heading...";
+      if (node.type.name === "codeBlock") return "// Write code here";
+      if (node.type.name === "table") return "";
+      return "Type something...";
     },
   }),
 ];
@@ -133,3 +160,5 @@ function handleUpdate({ editor }: { editor: any }) {
     </Domternal>
   </div>
 </template>
+
+<style></style>
