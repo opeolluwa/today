@@ -63,25 +63,14 @@ const workspaceItems = computed(() => [
     }"
   >
     <button
-      class="inline-flex  min-w-52 items-center gap-2.5 px-3 py-2 mt-2 mb-6 dark:bg-gray-800/60 border-none hover:rounded-2xl focus:rounded hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors group capitalize"
+      class="inline-flex min-w-52 items-center gap-2.5 px-3 py-2 mt-2 mb-6 dark:bg-gray-800/60 border-none hover:rounded-2xl focus:rounded hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors group capitalize"
     >
-      <span
-        class="flex items-center justify-center size-6 rounded-md bg-accent-100 dark:bg-accent-900 shrink-0"
-      >
-        <UIcon
-          name="heroicons:briefcase"
-          class="size-3.5 text-accent-600 dark:text-accent-400"
-        />
-      </span>
+      
       <span
         class="flex-1 text-left text-sm font-medium text-gray-800 dark:text-gray-200 truncate"
       >
-        {{ activeWorkspaceName }}
+        {{ activeWorkspaceName }} workspace
       </span>
-      <UIcon
-        name="heroicons:chevron-up-down"
-        class="size-3.5 text-gray-400 dark:text-gray-500 shrink-0 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors"
-      />
     </button>
   </UDropdownMenu>
 </template>

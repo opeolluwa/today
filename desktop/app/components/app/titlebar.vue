@@ -45,9 +45,6 @@ const themeIcon = computed(() =>
   isDark.value ? "heroicons:sun" : "heroicons:moon",
 );
 const themeLabel = computed(() => (isDark.value ? "Light mode" : "Dark mode"));
-const internetStatusColor = computed(() =>
-  isOnline.value ? "success" : "error",
-);
 
 function onSearchInput(val: string) {
   searchQuery.value = val;
@@ -78,60 +75,62 @@ useEventListener("keydown", (e: KeyboardEvent) => {
 </script>
 
 <template>
-  <div class="titlebar grid grid-cls-12 items-center" data-tauri-drag-region>
+  <div class="titlebar grid grid-cols-12 items-center" data-tauri-drag-region>
     <!-- mac os controls-->
-    <div v-if="isMacOS" class="traffic-lights col-span-1">
-      <UTooltip text="Close">
-        <span class="btn close" @click="appWindow.close()" />
-      </UTooltip>
-      <UTooltip text="Minimize">
-        <span class="btn minimize" @click="appWindow.minimize()" />
-      </UTooltip>
-      <UTooltip text="Maximize">
-        <span class="btn maximize" @click="appWindow.toggleMaximize()" />
-      </UTooltip>
-    </div>
+      <div v-if="isMacOS" class="traffic-lights col-span-1">
+        <UTooltip text="Close">
+          <span class="btn close" @click="appWindow.close()" />
+        </UTooltip>
+        <UTooltip text="Minimize">
+          <span class="btn minimize" @click="appWindow.minimize()" />
+        </UTooltip>
+        <UTooltip text="Maximize">
+          <span class="btn maximize" @click="appWindow.toggleMaximize()" />
+        </UTooltip>
+      </div>
 
-    <!-- Windows controls -->
-    <div v-else class="controls ml-12">
-      <UTooltip text="Minimize">
-        <UButton
-          size="sm"
-          color="neutral"
-          variant="ghost"
-          icon="heroicons:minus"
-          aria-label="Minimize"
-          @click="appWindow.minimize()"
-        />
-      </UTooltip>
+      <!-- Windows controls -->
+      <div v-else class="controls ml-12">
+        <UTooltip text="Minimize">
+          <UButton
+            size="sm"
+            color="neutral"
+            variant="ghost"
+            icon="heroicons:minus"
+            aria-label="Minimize"
+            @click="appWindow.minimize()"
+          />
+        </UTooltip>
 
-      <UTooltip text="Maximize">
-        <UButton
-          size="sm"
-          color="neutral"
-          variant="ghost"
-          icon="lucide:maximize"
-          aria-label="Maximize"
-          @click="appWindow.maximize()"
-        />
-      </UTooltip>
+        <UTooltip text="Maximize">
+          <UButton
+            size="sm"
+            color="neutral"
+            variant="ghost"
+            icon="lucide:maximize"
+            aria-label="Maximize"
+            @click="appWindow.maximize()"
+          />
+        </UTooltip>
 
-      <UTooltip text="Close">
-        <UButton
-          size="sm"
-          color="neutral"
-          variant="ghost"
-          icon="heroicons:x-mark"
-          aria-label="Close"
-          @click="appWindow.close()"
-        />
-      </UTooltip>
-    </div>
+        <UTooltip text="Close">
+          <UButton
+            size="sm"
+            color="neutral"
+            variant="ghost"
+            icon="heroicons:x-mark"
+            aria-label="Close"
+            @click="appWindow.close()"
+          />
+        </UTooltip>
+      </div>
 
+    <WorkspaceSelect class="col-span-1" />
     <!-- Back & forward button -->
-    <WorkspaceSelect />
+
+
     <div
-      class="col-col-end-3 flex items-center justify-center -gap-x-1.25 ml-16"
+      class="col-col-end-4 flex items-center justify-center -gap-x-1.25 ml-16"
     >
       <UTooltip :text="syncTooltip">
         <UButton
@@ -151,7 +150,6 @@ useEventListener("keydown", (e: KeyboardEvent) => {
         </UButton>
       </UTooltip>
 
-      <UTooltip :text="`Go back (${isMacOS ? '⌘' : 'Ctrl'}+[)`">
         <UButton
           size="sm"
           color="neutral"
@@ -160,9 +158,7 @@ useEventListener("keydown", (e: KeyboardEvent) => {
           aria-label="Go back"
           @click="router.back()"
         />
-      </UTooltip>
 
-      <UTooltip :text="`Go forward (${isMacOS ? '⌘' : 'Ctrl'}+])`">
         <UButton
           size="sm"
           color="neutral"
@@ -171,7 +167,6 @@ useEventListener("keydown", (e: KeyboardEvent) => {
           aria-label="Go forward"
           @click="router.forward()"
         />
-      </UTooltip>
     </div>
 
     <!-- Search -->
@@ -283,6 +278,9 @@ useEventListener("keydown", (e: KeyboardEvent) => {
 .titlebar > * {
   cursor: pointer;
   border: none;
+  height: 25px;
+  outline: none;
+  box-shadow: none;
 }
 
 .traffic-lights {

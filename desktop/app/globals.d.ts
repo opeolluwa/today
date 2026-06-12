@@ -5,7 +5,17 @@ declare interface Window {
   __TAURI_OS_PLUGIN_INTERNALS__?: {
     eol: string;
     os_type: "linux" | "windows" | "macos" | "ios" | "android";
-    platform: "linux" | "macos" | "ios" | "freebsd" | "dragonfly" | "netbsd" | "openbsd" | "solaris" | "android" | "windows";
+    platform:
+      | "linux"
+      | "macos"
+      | "ios"
+      | "freebsd"
+      | "dragonfly"
+      | "netbsd"
+      | "openbsd"
+      | "solaris"
+      | "android"
+      | "windows";
     family: "unix" | "windows";
     version: string;
     arch: string;

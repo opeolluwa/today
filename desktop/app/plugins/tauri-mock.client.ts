@@ -4,9 +4,8 @@
 export default defineNuxtPlugin(async () => {
   if (typeof window === "undefined" || window.__TAURI_INTERNALS__) return;
 
-  const { mockWindows, mockIPC, mockConvertFileSrc } = await import(
-    "@tauri-apps/api/mocks"
-  );
+  const { mockWindows, mockIPC, mockConvertFileSrc } =
+    await import("@tauri-apps/api/mocks");
 
   mockWindows("main");
   mockConvertFileSrc("macos");
