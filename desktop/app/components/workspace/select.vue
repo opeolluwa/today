@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 const workspaceStore = useWorkspacesStore();
-const showCreateModal = ref(false);
+const showCreateModal = ref(true);
 
 function handleWorkspaceSelect(identifier: string) {
   const ws = workspaceStore.visibleWorkspaces.find(
@@ -79,5 +79,5 @@ const workspaceItems = computed(() => [
     </button>
   </UDropdownMenu>
 
-  <AppWorkspaceCreateModal v-model:open="showCreateModal" />
+  <WorkspaceCreateModal v-model:open="showCreateModal" />
 </template>
