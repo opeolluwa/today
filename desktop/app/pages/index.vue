@@ -427,11 +427,11 @@ const quickActions = [
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <!-- Todos: 2-col card with SVG ring -->
         <div
-          class="lg:col-span-2 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700/60 overflow-hidden flex flex-col"
+          class="lg:col-span-2 bg-white dark:bg-gray-800/60 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col"
         >
           <!-- Card header -->
           <div
-            class="flex items-center gap-3 px-5 py-4 border-b border-gray-100 dark:border-gray-700/50"
+            class="flex items-center gap-3 px-5 py-4 border-b border-gray-100 dark:border-gray-700"
           >
             <!-- Progress ring -->
             <div class="relative size-15 shrink-0">
@@ -492,23 +492,27 @@ const quickActions = [
               v-else-if="activeTodos.length === 0"
               class="flex flex-col items-center justify-center py-12 text-center"
             >
-              <UIcon
-                name="heroicons:check-badge"
-                class="size-10 text-emerald-400 mb-2"
-              />
-              <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
-                All caught up!
-              </p>
-              <NuxtLink
-                to="/todo/create-todo"
-                class="text-xs text-accent-500 hover:underline mt-1 hidden"
-                >Add a new todo</NuxtLink
+              <div
+                class="p-2 flex justify-center items-center rounded-full bg-gray-100 dark:bg-gray-800"
               >
+                <UIcon
+                  name="heroicons:check-circle"
+                  class="size-6 text-gray-400 dark:text-gray-500"
+                />
+              </div>
+              <p
+                class="mt-3 text-xs font-medium text-gray-600 dark:text-gray-400"
+              >
+                No active todos
+              </p>
+              <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+                Your pending tasks will appear here.
+              </p>
             </div>
 
             <div
               v-else
-              class="divide-y divide-gray-100 dark:divide-gray-700/40"
+              class="divide-y divide-gray-100 dark:divide-gray-700/60"
             >
               <div
                 v-for="todo in activeTodos"
@@ -545,68 +549,12 @@ const quickActions = [
 
         <!-- Right column -->
         <div class="flex flex-col gap-4">
-          <!-- Next reminder -->
-          <div
-            v-if="nextReminder"
-            class="bg-linear-to-br from-rose-50 to-orange-50/60 dark:from-rose-950/40 dark:to-orange-950/20 rounded-2xl border border-rose-100 dark:border-rose-900/40 p-5"
-          >
-            <div class="flex items-start justify-between mb-3">
-              <div class="flex items-center gap-1.5 text-rose-500">
-                <UIcon
-                  :name="
-                    nextReminder.recurring
-                      ? 'heroicons:arrow-path'
-                      : 'heroicons:bell'
-                  "
-                  class="size-3.5"
-                />
-                <span class="text-xs font-semibold uppercase tracking-wide"
-                  >Next reminder</span
-                >
-              </div>
-              <span
-                class="text-xs font-bold px-2 py-0.5 rounded-full bg-rose-100 dark:bg-rose-900/50 text-rose-600 dark:text-rose-400 shrink-0"
-              >
-                {{ timeUntil(nextReminder.remindAt) }}
-              </span>
-            </div>
-            <p class="text-sm font-semibold text-gray-800 dark:text-gray-200">
-              {{ nextReminder.title }}
-            </p>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              {{ formatRemindAt(nextReminder.remindAt) }}
-            </p>
-            <span
-              v-if="nextReminder.recurring"
-              class="inline-flex items-center gap-1 mt-2.5 text-xs px-2 py-0.5 rounded-full bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400"
-            >
-              <UIcon name="heroicons:arrow-path" class="size-3" />
-              Recurring
-            </span>
-          </div>
-
-          <div
-            v-else
-            class="rounded-2xl border border-dashed border-gray-200 dark:border-gray-700 p-5 flex flex-col items-center justify-center text-center bg-gray-50/50 dark:bg-gray-900/30"
-          >
-            <UIcon
-              name="heroicons:bell-slash"
-              class="size-7 text-gray-300 dark:text-gray-600 mb-2"
-            />
-            <p class="text-xs text-gray-400">No upcoming reminders</p>
-            <NuxtLink
-              to="/reminders/create-reminder"
-              class="text-xs text-accent-500 hover:underline mt-1"
-              >Set one up</NuxtLink
-            >
-          </div>
-
           <!-- Recent notes -->
           <div
-            class="flex-1 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700/60 overflow-hidden flex flex-col"
+            class="flex-1 bg-white dark:bg-gray-800/60 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col"
           >
             <div
-              class="flex items-center justify-between px-4 py-3.5 border-b border-gray-100 dark:border-gray-700/50"
+              class="flex items-center justify-between px-4 py-3.5 border-b border-gray-100 dark:border-gray-700"
             >
               <h2
                 class="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-1.5"
@@ -631,18 +579,28 @@ const quickActions = [
             </div>
             <div
               v-else-if="recentNotes.length === 0"
-              class="p-5 text-center flex-1 flex flex-col items-center justify-center"
+              class="flex-1 flex flex-col items-center justify-center py-8 text-center"
             >
-              <p class="text-xs text-gray-400">No notes yet</p>
-              <NuxtLink
-                to="/notes/create-notes"
-                class="text-xs text-accent-500 hover:underline mt-1"
-                >Create one</NuxtLink
+              <div
+                class="p-2 flex justify-center items-center rounded-full bg-gray-100 dark:bg-gray-800"
               >
+                <UIcon
+                  name="heroicons:document-text"
+                  class="size-6 text-gray-400 dark:text-gray-500"
+                />
+              </div>
+              <p
+                class="mt-3 text-xs font-medium text-gray-600 dark:text-gray-400"
+              >
+                No notes yet
+              </p>
+              <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+                Your recent notes will appear here.
+              </p>
             </div>
             <div
               v-else
-              class="divide-y divide-gray-100 dark:divide-gray-700/40"
+              class="divide-y divide-gray-100 dark:divide-gray-700/60"
             >
               <NuxtLink
                 v-for="note in recentNotes"
@@ -678,10 +636,10 @@ const quickActions = [
 
         <!-- Bookmarks: full-width row -->
         <div
-          class="lg:col-span-3 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700/60 overflow-hidden"
+          class="lg:col-span-3 bg-white dark:bg-gray-800/60 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
         >
           <div
-            class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 dark:border-gray-700/50"
+            class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 dark:border-gray-700"
           >
             <h2
               class="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-1.5"
@@ -689,7 +647,6 @@ const quickActions = [
               <UIcon name="heroicons:bookmark" class="size-4 text-accent-400" />
               Recent bookmarks
             </h2>
-           
           </div>
 
           <div
@@ -699,17 +656,16 @@ const quickActions = [
             <UIcon name="heroicons:arrow-path" class="size-4 animate-spin" />
             Loading…
           </div>
-          <div v-else-if="recentBookmarks.length === 0" class="p-6 text-center">
-            <p class="text-sm text-gray-400">No bookmarks saved yet.</p>
-            <NuxtLink
-              to="/bookmarks"
-              class="text-xs text-accent-500 hover:underline mt-1 block hidden"
-              >Add your first bookmark</NuxtLink
-            >
+          <div v-else-if="recentBookmarks.length === 0" class="flex flex-col items-center justify-center py-10 text-center">
+            <div class="p-2 flex justify-center items-center rounded-full bg-gray-100 dark:bg-gray-800">
+              <UIcon name="heroicons:bookmark" class="size-6 text-gray-400 dark:text-gray-500" />
+            </div>
+            <p class="mt-3 text-xs font-medium text-gray-600 dark:text-gray-400">No bookmarks yet</p>
+            <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">Saved bookmarks will appear here.</p>
           </div>
           <div
             v-else
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-gray-100 dark:divide-gray-700/40"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-gray-100 dark:divide-gray-700/60"
           >
             <div
               v-for="bm in recentBookmarks"
@@ -762,7 +718,11 @@ const quickActions = [
             :to="action.href"
             class="flex items-center gap-2.5 px-3 py-2.5 text-sm font-medium transition-colors"
           >
-            <UIcon :name="action.icon" class="size-4 shrink-0" />
+            <UIcon
+              :name="action.icon"
+              :color="action.color"
+              class="size-4 shrink-0"
+            />
             {{ action.label }}
           </NuxtLink>
         </div>

@@ -131,7 +131,7 @@ useEventListener("keydown", (e: KeyboardEvent) => {
 
     <!-- Search -->
     <div class="flex-1 flex max-w-sm mx-auto relative">
-      <div class="inline-flex items-center shrink-0 mr-5 ">
+      <div class="inline-flex items-center shrink-0 mr-5">
         <UButton
           size="sm"
           color="neutral"
@@ -151,7 +151,7 @@ useEventListener("keydown", (e: KeyboardEvent) => {
         />
       </div>
       <div
-        class="flex items-center gap-2 px-3 py-2.5 transition-colors bg-none dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus-within:border-accent-400 dark:focus-within:border-accent-500 "
+        class="flex items-center gap-2 px-3 py-2.5 transition-colors bg-none dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus-within:border-accent-400 dark:focus-within:border-accent-500"
       >
         <UIcon
           name="heroicons:magnifying-glass"
@@ -164,19 +164,17 @@ useEventListener("keydown", (e: KeyboardEvent) => {
           autocapitalize="off"
           autocorrect="off"
           spellcheck="false"
-          class="flex-1 min-w-0   outline-none text-sm text-gray-700 dark:text-gray-300 placeholder-gray-400 dark:placeholder-gray-500"
+          class="flex-1 min-w-0 outline-none text-sm text-gray-700 dark:text-gray-300 placeholder-gray-400 dark:placeholder-gray-500"
           @input="onSearchInput(($event.target as HTMLInputElement).value)"
           @keydown.escape="
             isOpen = false;
             searchInputRef?.blur();
           "
-        />
+        >
         <kbd
           v-if="!searchQuery"
           class="hidden sm:inline-flex items-center gap-0.5 text-[10px] text-gray-400 dark:text-gray-500 font-mono select-none"
-        >
-         
-        </kbd>
+        />
         <button
           v-if="searchQuery"
           class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
