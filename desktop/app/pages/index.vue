@@ -6,7 +6,7 @@ import { useUserPreferenceStore } from "~/stores/workspace-preferences";
 import { useReminderStore } from "~/stores/reminder";
 import { useSnippetStore } from "~/stores/snippets";
 import { openUrl } from "@tauri-apps/plugin-opener";
-import { useSyncQueueStore } from "~/stores/sync-queue";
+
 definePageMeta({ layout: false });
 
 const noteStore = useNoteStore();
@@ -15,7 +15,6 @@ const todoStore = useTodoStore();
 const userPreferenceStore = useUserPreferenceStore();
 const reminderStore = useReminderStore();
 const snippetStore = useSnippetStore();
-const syncQueueStore = useSyncQueueStore();
 
 const { setSearch, clearSearch, searchQuery } = useAppSearch();
 
@@ -329,7 +328,7 @@ const quickActions = [
   },
   {
     label: "Add bookmark",
-    icon: "heroicons:bookmark-plus",
+    icon: "heroicons:bookmark",
     href: "/bookmarks",
     color:
       "text-accent-600 dark:text-accent-400 bg-accent-50 dark:bg-accent-950/60 hover:bg-accent-100 dark:hover:bg-accent-900/60 border-accent-100 dark:border-accent-900",
@@ -425,84 +424,7 @@ const quickActions = [
 
     <!-- ── Main content ────────────────────────────────────────────── -->
     <template #main_content>
-      <!-- Search results -->
-      <template v-if="searchQuery.trim()">
-        <div
-          v-if="totalSearchResults === 0"
-          class="flex flex-col items-center justify-center py-20 text-center"
-        >
-          <UIcon
-            name="heroicons:magnifying-glass"
-            class="size-10 text-gray-300 dark:text-gray-600 mb-3"
-          />
-          <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
-            No results for "{{ searchQuery }}"
-          </p>
-        </div>
-        <div v-else class="flex flex-col gap-4">
-          <p class="text-xs text-gray-400">
-            {{ totalSearchResults }} result{{
-              totalSearchResults === 1 ? "" : "s"
-            }}
-            for "{{ searchQuery }}"
-          </p>
-          <div
-            v-for="section in searchSections"
-            :key="section.label"
-            class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700/60 overflow-hidden"
-          >
-            <div
-              class="flex items-center gap-2 px-4 py-3 border-b border-gray-100 dark:border-gray-700/50"
-            >
-              <UIcon
-                :name="section.icon"
-                class="size-4 shrink-0"
-                :class="section.color"
-              />
-              <h2
-                class="text-sm font-semibold text-gray-700 dark:text-gray-300"
-              >
-                {{ section.label }}
-              </h2>
-              <span class="ml-auto text-xs text-gray-400">{{
-                section.items.length
-              }}</span>
-            </div>
-            <div class="divide-y divide-gray-100 dark:divide-gray-700/40">
-              <NuxtLink
-                v-for="item in section.items"
-                :key="item.identifier"
-                :to="item.href"
-                class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors"
-              >
-                <div
-                  class="size-7 rounded-lg flex items-center justify-center shrink-0"
-                  :class="section.bg"
-                >
-                  <UIcon
-                    :name="section.icon"
-                    class="size-3.5"
-                    :class="section.color"
-                  />
-                </div>
-                <div class="flex-1 min-w-0">
-                  <p class="text-sm text-gray-800 dark:text-gray-200 truncate">
-                    {{ item.title }}
-                  </p>
-                  <p
-                    v-if="item.sub"
-                    class="text-xs text-gray-400 truncate mt-0.5"
-                  >
-                    {{ item.sub }}
-                  </p>
-                </div>
-              </NuxtLink>
-            </div>
-          </div>
-        </div>
-      </template>
-
-      <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <!-- Todos: 2-col card with SVG ring -->
         <div
           class="lg:col-span-2 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700/60 overflow-hidden flex flex-col"
@@ -554,13 +476,6 @@ const quickActions = [
                 {{ todoStore.todos.length }} complete
               </p>
             </div>
-
-            <NuxtLink
-              to="/todo"
-              class="shrink-0 text-xs font-medium text-accent-500 hover:text-accent-600 transition-colors"
-            >
-              See all →
-            </NuxtLink>
           </div>
 
           <!-- Todo list -->
@@ -586,7 +501,7 @@ const quickActions = [
               </p>
               <NuxtLink
                 to="/todo/create-todo"
-                class="text-xs text-accent-500 hover:underline mt-1"
+                class="text-xs text-accent-500 hover:underline mt-1 hidden"
                 >Add a new todo</NuxtLink
               >
             </div>
@@ -702,11 +617,6 @@ const quickActions = [
                 />
                 Recent notes
               </h2>
-              <NuxtLink
-                to="/notes"
-                class="text-xs text-accent-500 hover:text-accent-600 transition-colors"
-                >View all →</NuxtLink
-              >
             </div>
 
             <div
@@ -779,11 +689,7 @@ const quickActions = [
               <UIcon name="heroicons:bookmark" class="size-4 text-accent-400" />
               Recent bookmarks
             </h2>
-            <NuxtLink
-              to="/bookmarks"
-              class="text-xs text-accent-500 hover:text-accent-600 transition-colors"
-              >View all →</NuxtLink
-            >
+           
           </div>
 
           <div
@@ -797,7 +703,7 @@ const quickActions = [
             <p class="text-sm text-gray-400">No bookmarks saved yet.</p>
             <NuxtLink
               to="/bookmarks"
-              class="text-xs text-accent-500 hover:underline mt-1 block"
+              class="text-xs text-accent-500 hover:underline mt-1 block hidden"
               >Add your first bookmark</NuxtLink
             >
           </div>
@@ -854,8 +760,7 @@ const quickActions = [
             v-for="action in quickActions"
             :key="action.label"
             :to="action.href"
-            class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl border text-sm font-medium transition-colors"
-            :class="action.color"
+            class="flex items-center gap-2.5 px-3 py-2.5 text-sm font-medium transition-colors"
           >
             <UIcon :name="action.icon" class="size-4 shrink-0" />
             {{ action.label }}
