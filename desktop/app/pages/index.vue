@@ -427,11 +427,11 @@ const quickActions = [
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <!-- Todos: 2-col card with SVG ring -->
         <div
-          class="lg:col-span-2 bg-white dark:bg-gray-800/60 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col"
+          class="lg:col-span-2 bg-white dark:bg-gray-800/60 rounded-2xl border border-gray-200 dark:border-white/15 overflow-hidden flex flex-col"
         >
           <!-- Card header -->
           <div
-            class="flex items-center gap-3 px-5 py-4 border-b border-gray-100 dark:border-gray-700"
+            class="flex items-center gap-3 px-5 py-4 border-b border-gray-100 dark:border-white/10"
           >
             <!-- Progress ring -->
             <div class="relative size-15 shrink-0">
@@ -551,10 +551,10 @@ const quickActions = [
         <div class="flex flex-col gap-4">
           <!-- Recent notes -->
           <div
-            class="flex-1 bg-white dark:bg-gray-800/60 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col"
+            class="flex-1 bg-white dark:bg-gray-800/60 rounded-2xl border border-gray-200 dark:border-white/15 overflow-hidden flex flex-col"
           >
             <div
-              class="flex items-center justify-between px-4 py-3.5 border-b border-gray-100 dark:border-gray-700"
+              class="flex items-center justify-between px-4 py-3.5 border-b border-gray-100 dark:border-white/10"
             >
               <h2
                 class="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-1.5"
@@ -636,10 +636,10 @@ const quickActions = [
 
         <!-- Bookmarks: full-width row -->
         <div
-          class="lg:col-span-3 bg-white dark:bg-gray-800/60 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+          class="lg:col-span-3 bg-white dark:bg-gray-800/60 rounded-2xl border border-gray-200 dark:border-white/15 overflow-hidden"
         >
           <div
-            class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 dark:border-gray-700"
+            class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 dark:border-white/10"
           >
             <h2
               class="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-1.5"
