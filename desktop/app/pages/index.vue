@@ -6,7 +6,7 @@ import { useUserPreferenceStore } from "~/stores/workspace-preferences";
 import { useReminderStore } from "~/stores/reminder";
 import { useSnippetStore } from "~/stores/snippets";
 import { openUrl } from "@tauri-apps/plugin-opener";
-import { useSyncQueueStore } from "~/stores/sync-queue";
+
 definePageMeta({ layout: false });
 
 const noteStore = useNoteStore();
@@ -15,7 +15,6 @@ const todoStore = useTodoStore();
 const userPreferenceStore = useUserPreferenceStore();
 const reminderStore = useReminderStore();
 const snippetStore = useSnippetStore();
-const syncQueueStore = useSyncQueueStore();
 
 const { setSearch, clearSearch, searchQuery } = useAppSearch();
 
@@ -329,7 +328,7 @@ const quickActions = [
   },
   {
     label: "Add bookmark",
-    icon: "heroicons:bookmark-plus",
+    icon: "heroicons:bookmark",
     href: "/bookmarks",
     color:
       "text-accent-600 dark:text-accent-400 bg-accent-50 dark:bg-accent-950/60 hover:bg-accent-100 dark:hover:bg-accent-900/60 border-accent-100 dark:border-accent-900",
@@ -425,91 +424,14 @@ const quickActions = [
 
     <!-- ── Main content ────────────────────────────────────────────── -->
     <template #main_content>
-      <!-- Search results -->
-      <template v-if="searchQuery.trim()">
-        <div
-          v-if="totalSearchResults === 0"
-          class="flex flex-col items-center justify-center py-20 text-center"
-        >
-          <UIcon
-            name="heroicons:magnifying-glass"
-            class="size-10 text-gray-300 dark:text-gray-600 mb-3"
-          />
-          <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
-            No results for "{{ searchQuery }}"
-          </p>
-        </div>
-        <div v-else class="flex flex-col gap-4">
-          <p class="text-xs text-gray-400">
-            {{ totalSearchResults }} result{{
-              totalSearchResults === 1 ? "" : "s"
-            }}
-            for "{{ searchQuery }}"
-          </p>
-          <div
-            v-for="section in searchSections"
-            :key="section.label"
-            class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700/60 overflow-hidden"
-          >
-            <div
-              class="flex items-center gap-2 px-4 py-3 border-b border-gray-100 dark:border-gray-700/50"
-            >
-              <UIcon
-                :name="section.icon"
-                class="size-4 shrink-0"
-                :class="section.color"
-              />
-              <h2
-                class="text-sm font-semibold text-gray-700 dark:text-gray-300"
-              >
-                {{ section.label }}
-              </h2>
-              <span class="ml-auto text-xs text-gray-400">{{
-                section.items.length
-              }}</span>
-            </div>
-            <div class="divide-y divide-gray-100 dark:divide-gray-700/40">
-              <NuxtLink
-                v-for="item in section.items"
-                :key="item.identifier"
-                :to="item.href"
-                class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors"
-              >
-                <div
-                  class="size-7 rounded-lg flex items-center justify-center shrink-0"
-                  :class="section.bg"
-                >
-                  <UIcon
-                    :name="section.icon"
-                    class="size-3.5"
-                    :class="section.color"
-                  />
-                </div>
-                <div class="flex-1 min-w-0">
-                  <p class="text-sm text-gray-800 dark:text-gray-200 truncate">
-                    {{ item.title }}
-                  </p>
-                  <p
-                    v-if="item.sub"
-                    class="text-xs text-gray-400 truncate mt-0.5"
-                  >
-                    {{ item.sub }}
-                  </p>
-                </div>
-              </NuxtLink>
-            </div>
-          </div>
-        </div>
-      </template>
-
-      <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <!-- Todos: 2-col card with SVG ring -->
         <div
-          class="lg:col-span-2 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700/60 overflow-hidden flex flex-col"
+          class="lg:col-span-2 bg-white dark:bg-gray-800/60 rounded-2xl border border-gray-200 dark:border-white/15 overflow-hidden flex flex-col"
         >
           <!-- Card header -->
           <div
-            class="flex items-center gap-3 px-5 py-4 border-b border-gray-100 dark:border-gray-700/50"
+            class="flex items-center gap-3 px-5 py-4 border-b border-gray-100 dark:border-white/10"
           >
             <!-- Progress ring -->
             <div class="relative size-15 shrink-0">
@@ -545,7 +467,7 @@ const quickActions = [
 
             <div class="flex-1 min-w-0">
               <h2
-                class="text-sm font-semibold text-gray-800 dark:text-gray-200"
+                class="text-sm font-semibold text-gray-800 dark:text-gray-300/70"
               >
                 Active Todos
               </h2>
@@ -554,13 +476,6 @@ const quickActions = [
                 {{ todoStore.todos.length }} complete
               </p>
             </div>
-
-            <NuxtLink
-              to="/todo"
-              class="shrink-0 text-xs font-medium text-accent-500 hover:text-accent-600 transition-colors"
-            >
-              See all →
-            </NuxtLink>
           </div>
 
           <!-- Todo list -->
@@ -577,23 +492,27 @@ const quickActions = [
               v-else-if="activeTodos.length === 0"
               class="flex flex-col items-center justify-center py-12 text-center"
             >
-              <UIcon
-                name="heroicons:check-badge"
-                class="size-10 text-emerald-400 mb-2"
-              />
-              <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
-                All caught up!
-              </p>
-              <NuxtLink
-                to="/todo/create-todo"
-                class="text-xs text-accent-500 hover:underline mt-1"
-                >Add a new todo</NuxtLink
+              <div
+                class="p-2 flex justify-center items-center rounded-full bg-gray-100 dark:bg-gray-800"
               >
+                <UIcon
+                  name="heroicons:check-circle"
+                  class="size-6 text-gray-400 dark:text-gray-500"
+                />
+              </div>
+              <p
+                class="mt-3 text-xs font-medium text-gray-600 dark:text-gray-400"
+              >
+                No active todos
+              </p>
+              <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+                Your pending tasks will appear here.
+              </p>
             </div>
 
             <div
               v-else
-              class="divide-y divide-gray-100 dark:divide-gray-700/40"
+              class="divide-y divide-gray-100 dark:divide-gray-700/60"
             >
               <div
                 v-for="todo in activeTodos"
@@ -630,71 +549,15 @@ const quickActions = [
 
         <!-- Right column -->
         <div class="flex flex-col gap-4">
-          <!-- Next reminder -->
-          <div
-            v-if="nextReminder"
-            class="bg-linear-to-br from-rose-50 to-orange-50/60 dark:from-rose-950/40 dark:to-orange-950/20 rounded-2xl border border-rose-100 dark:border-rose-900/40 p-5"
-          >
-            <div class="flex items-start justify-between mb-3">
-              <div class="flex items-center gap-1.5 text-rose-500">
-                <UIcon
-                  :name="
-                    nextReminder.recurring
-                      ? 'heroicons:arrow-path'
-                      : 'heroicons:bell'
-                  "
-                  class="size-3.5"
-                />
-                <span class="text-xs font-semibold uppercase tracking-wide"
-                  >Next reminder</span
-                >
-              </div>
-              <span
-                class="text-xs font-bold px-2 py-0.5 rounded-full bg-rose-100 dark:bg-rose-900/50 text-rose-600 dark:text-rose-400 shrink-0"
-              >
-                {{ timeUntil(nextReminder.remindAt) }}
-              </span>
-            </div>
-            <p class="text-sm font-semibold text-gray-800 dark:text-gray-200">
-              {{ nextReminder.title }}
-            </p>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              {{ formatRemindAt(nextReminder.remindAt) }}
-            </p>
-            <span
-              v-if="nextReminder.recurring"
-              class="inline-flex items-center gap-1 mt-2.5 text-xs px-2 py-0.5 rounded-full bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400"
-            >
-              <UIcon name="heroicons:arrow-path" class="size-3" />
-              Recurring
-            </span>
-          </div>
-
-          <div
-            v-else
-            class="rounded-2xl border border-dashed border-gray-200 dark:border-gray-700 p-5 flex flex-col items-center justify-center text-center bg-gray-50/50 dark:bg-gray-900/30"
-          >
-            <UIcon
-              name="heroicons:bell-slash"
-              class="size-7 text-gray-300 dark:text-gray-600 mb-2"
-            />
-            <p class="text-xs text-gray-400">No upcoming reminders</p>
-            <NuxtLink
-              to="/reminders/create-reminder"
-              class="text-xs text-accent-500 hover:underline mt-1"
-              >Set one up</NuxtLink
-            >
-          </div>
-
           <!-- Recent notes -->
           <div
-            class="flex-1 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700/60 overflow-hidden flex flex-col"
+            class="flex-1 bg-white dark:bg-gray-800/60 rounded-2xl border border-gray-200 dark:border-white/15 overflow-hidden flex flex-col"
           >
             <div
-              class="flex items-center justify-between px-4 py-3.5 border-b border-gray-100 dark:border-gray-700/50"
+              class="flex items-center justify-between px-4 py-3.5 border-b border-gray-100 dark:border-white/10"
             >
               <h2
-                class="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-1.5"
+                class="text-sm font-semibold text-gray-700 dark:text-gray-300/70 flex items-center gap-1.5"
               >
                 <UIcon
                   name="heroicons:document-text"
@@ -702,11 +565,6 @@ const quickActions = [
                 />
                 Recent notes
               </h2>
-              <NuxtLink
-                to="/notes"
-                class="text-xs text-accent-500 hover:text-accent-600 transition-colors"
-                >View all →</NuxtLink
-              >
             </div>
 
             <div
@@ -721,18 +579,28 @@ const quickActions = [
             </div>
             <div
               v-else-if="recentNotes.length === 0"
-              class="p-5 text-center flex-1 flex flex-col items-center justify-center"
+              class="flex-1 flex flex-col items-center justify-center py-8 text-center"
             >
-              <p class="text-xs text-gray-400">No notes yet</p>
-              <NuxtLink
-                to="/notes/create-notes"
-                class="text-xs text-accent-500 hover:underline mt-1"
-                >Create one</NuxtLink
+              <div
+                class="p-2 flex justify-center items-center rounded-full bg-gray-100 dark:bg-gray-800"
               >
+                <UIcon
+                  name="heroicons:document-text"
+                  class="size-6 text-gray-400 dark:text-gray-500"
+                />
+              </div>
+              <p
+                class="mt-3 text-xs font-medium text-gray-600 dark:text-gray-400"
+              >
+                No notes yet
+              </p>
+              <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+                Your recent notes will appear here.
+              </p>
             </div>
             <div
               v-else
-              class="divide-y divide-gray-100 dark:divide-gray-700/40"
+              class="divide-y divide-gray-100 dark:divide-gray-700/60"
             >
               <NuxtLink
                 v-for="note in recentNotes"
@@ -768,22 +636,17 @@ const quickActions = [
 
         <!-- Bookmarks: full-width row -->
         <div
-          class="lg:col-span-3 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700/60 overflow-hidden"
+          class="lg:col-span-3 bg-white dark:bg-gray-800/60 rounded-2xl border border-gray-200 dark:border-white/15 overflow-hidden"
         >
           <div
-            class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 dark:border-gray-700/50"
+            class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 dark:border-white/10"
           >
             <h2
-              class="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-1.5"
+              class="text-sm font-semibold text-gray-700 dark:text-gray-300/70 flex items-center gap-1.5"
             >
               <UIcon name="heroicons:bookmark" class="size-4 text-accent-400" />
               Recent bookmarks
             </h2>
-            <NuxtLink
-              to="/bookmarks"
-              class="text-xs text-accent-500 hover:text-accent-600 transition-colors"
-              >View all →</NuxtLink
-            >
           </div>
 
           <div
@@ -793,17 +656,30 @@ const quickActions = [
             <UIcon name="heroicons:arrow-path" class="size-4 animate-spin" />
             Loading…
           </div>
-          <div v-else-if="recentBookmarks.length === 0" class="p-6 text-center">
-            <p class="text-sm text-gray-400">No bookmarks saved yet.</p>
-            <NuxtLink
-              to="/bookmarks"
-              class="text-xs text-accent-500 hover:underline mt-1 block"
-              >Add your first bookmark</NuxtLink
+          <div
+            v-else-if="recentBookmarks.length === 0"
+            class="flex flex-col items-center justify-center py-10 text-center"
+          >
+            <div
+              class="p-2 flex justify-center items-center rounded-full bg-gray-100 dark:bg-gray-800"
             >
+              <UIcon
+                name="heroicons:bookmark"
+                class="size-6 text-gray-400 dark:text-gray-500"
+              />
+            </div>
+            <p
+              class="mt-3 text-xs font-medium text-gray-600 dark:text-gray-400"
+            >
+              No bookmarks yet
+            </p>
+            <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+              Saved bookmarks will appear here.
+            </p>
           </div>
           <div
             v-else
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-gray-100 dark:divide-gray-700/40"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-gray-100 dark:divide-gray-700/60"
           >
             <div
               v-for="bm in recentBookmarks"
@@ -854,11 +730,20 @@ const quickActions = [
             v-for="action in quickActions"
             :key="action.label"
             :to="action.href"
-            class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl border text-sm font-medium transition-colors"
             :class="action.color"
+            class="flex items-center gap-2.5 px-3 py-2.5 text-sm font-medium transition-colors"
           >
-            <UIcon :name="action.icon" class="size-4 shrink-0" />
-            {{ action.label }}
+            <UIcon
+              :name="action.icon"
+              :color="action.color"
+              class="size-4 shrink-0"
+            />
+            <span
+              class="text-gray-800 dark:text-gray-200"
+              :class="action.color"
+            >
+              {{ action.label }}
+            </span>
           </NuxtLink>
         </div>
       </section>

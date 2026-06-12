@@ -113,43 +113,43 @@ useEventListener("keydown", (e: KeyboardEvent) => {
 
     <WorkspaceSelect class="shrink-0" />
 
-    <div class="flex items-center gap-1 shrink-0 hidden">
-      <UButton
-        size="sm"
-        variant="ghost"
-        :disabled="!isOnline"
-        aria-label="Sync data"
-        @click="syncQueueStore.runSync()"
-      >
-        <template #leading>
-          <UIcon
-            :name="syncIcon"
-            :class="['size-4', runningSync && 'animate-spin']"
-          />
-        </template>
-      </UButton>
-
-      <UButton
-        size="sm"
-        color="neutral"
-        variant="ghost"
-        icon="heroicons:arrow-left"
-        aria-label="Go back"
-        @click="router.back()"
-      />
-
-      <UButton
-        size="sm"
-        color="neutral"
-        variant="ghost"
-        icon="heroicons:arrow-right"
-        aria-label="Go forward"
-        @click="router.forward()"
-      />
-    </div>
+    <UButton
+      size="sm"
+      variant="ghost"
+      :disabled="!isOnline"
+      aria-label="Sync data"
+      class="hidden"
+      @click="syncQueueStore.runSync()"
+    >
+      <template #leading>
+        <UIcon
+          :name="syncIcon"
+          :class="['size-4', runningSync && 'animate-spin']"
+        />
+      </template>
+    </UButton>
 
     <!-- Search -->
-    <div class="flex-1 max-w-sm mx-auto relative">
+    <div class="flex-1 flex max-w-sm mx-auto relative">
+      <div class="inline-flex items-center shrink-0 mr-5">
+        <UButton
+          size="sm"
+          color="neutral"
+          variant="ghost"
+          icon="heroicons:chevron-left"
+          aria-label="Go back"
+          @click="router.back()"
+        />
+
+        <UButton
+          size="sm"
+          color="neutral"
+          variant="ghost"
+          icon="heroicons:chevron-right"
+          aria-label="Go forward"
+          @click="router.forward()"
+        />
+      </div>
       <div
         class="flex items-center gap-2 px-3 py-2.5 transition-colors bg-none dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus-within:border-accent-400 dark:focus-within:border-accent-500"
       >
@@ -164,7 +164,7 @@ useEventListener("keydown", (e: KeyboardEvent) => {
           autocapitalize="off"
           autocorrect="off"
           spellcheck="false"
-          class="flex-1 min-w-0 bg-transparent outline-none text-sm text-gray-700 dark:text-gray-300 placeholder-gray-400 dark:placeholder-gray-500"
+          class="flex-1 min-w-0 outline-none text-sm text-gray-700 dark:text-gray-300 placeholder-gray-400 dark:placeholder-gray-500"
           @input="onSearchInput(($event.target as HTMLInputElement).value)"
           @keydown.escape="
             isOpen = false;
@@ -174,10 +174,7 @@ useEventListener("keydown", (e: KeyboardEvent) => {
         <kbd
           v-if="!searchQuery"
           class="hidden sm:inline-flex items-center gap-0.5 text-[10px] text-gray-400 dark:text-gray-500 font-mono select-none"
-        >
-          <span>{{ isMacOS ? "⌘" : "Ctrl" }}</span
-          ><span>F</span>
-        </kbd>
+        />
         <button
           v-if="searchQuery"
           class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
