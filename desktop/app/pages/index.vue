@@ -3,7 +3,6 @@ import { useNoteStore } from "~/stores/notes";
 import { useBookmarkStore } from "~/stores/bookmarks";
 import { useTodoStore } from "~/stores/todo";
 import { useUserPreferenceStore } from "~/stores/workspace-preferences";
-import { useReminderStore } from "~/stores/reminder";
 import { useSnippetStore } from "~/stores/snippets";
 import { openUrl } from "@tauri-apps/plugin-opener";
 
@@ -13,7 +12,6 @@ const noteStore = useNoteStore();
 const bookmarkStore = useBookmarkStore();
 const todoStore = useTodoStore();
 const userPreferenceStore = useUserPreferenceStore();
-const reminderStore = useReminderStore();
 const snippetStore = useSnippetStore();
 
 const { setSearch, clearSearch } = useAppSearch();
@@ -24,7 +22,6 @@ onMounted(async () => {
     bookmarkStore.fetchBookmarks(),
     todoStore.fetchTodos(),
     userPreferenceStore.fetchPreference(),
-    reminderStore.fetchReminders(),
     snippetStore.fetchSnippets(),
   ]);
   setSearch({ placeholder: "Search everything…" });
@@ -94,36 +91,6 @@ const priorityDot: Record<string, string> = {
   low: "bg-emerald-400",
 };
 
-// Reminders
-const upcomingReminders = computed(() =>
-  [...reminderStore.upcomingReminders]
-    .sort(
-      (a, b) => new Date(a.remindAt).getTime() - new Date(b.remindAt).getTime(),
-    )
-    .slice(0, 3),
-);
-
-const nextReminder = computed(() => upcomingReminders.value[0] ?? null);
-
-function timeUntil(iso: string) {
-  const diff = new Date(iso).getTime() - Date.now();
-  if (diff < 0) return "overdue";
-  const mins = Math.floor(diff / 60_000);
-  if (mins < 60) return `in ${mins}m`;
-  const hours = Math.floor(mins / 60);
-  if (hours < 24) return `in ${hours}h`;
-  return `in ${Math.floor(hours / 24)}d`;
-}
-
-function formatRemindAt(iso: string) {
-  return new Date(iso).toLocaleString("en-US", {
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-  });
-}
-
 // Notes & bookmarks
 const recentNotes = computed(() => noteStore.notes.slice(0, 4));
 const recentBookmarks = computed(() => bookmarkStore.bookmarks.slice(0, 4));
@@ -164,13 +131,6 @@ const statPills = computed(() => [
     icon: "heroicons:check-circle-solid",
     color: "text-emerald-500",
     href: "/todo",
-  },
-  {
-    label: "Reminders",
-    value: upcomingReminders.value.length,
-    icon: "heroicons:clock-solid",
-    color: "text-rose-500",
-    href: "/reminders",
   },
 ]);
 
@@ -241,22 +201,9 @@ const quickActions = [
                 }}</strong>
                 active
                 {{ todoStore.activeTodos.length === 1 ? "todo" : "todos" }}
-                today<span v-if="nextReminder"
-                  >, next reminder
-                  <strong class="text-rose-500">{{
-                    timeUntil(nextReminder.remindAt)
-                  }}</strong></span
-                >.
+                today.
               </template>
-              <template v-else>
-                You're all caught up
-                <span v-if="nextReminder"
-                  >— next reminder
-                  <strong class="text-rose-500">{{
-                    timeUntil(nextReminder.remindAt)
-                  }}</strong></span
-                >.
-              </template>
+              <template v-else> You're all caught up. </template>
             </p>
           </div>
         </div>
@@ -607,69 +554,9 @@ const quickActions = [
 
       <USeparator class="my-4" />
 
-      <!-- Reminders list -->
-      <section v-if="upcomingReminders.length > 0">
-        <div class="flex items-center justify-between mb-3">
-          <h2
-            class="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500"
-          >
-            Reminders
-          </h2>
-          <NuxtLink
-            to="/reminders"
-            class="text-xs text-accent-500 hover:text-accent-600 transition-colors"
-            >All →</NuxtLink
-          >
-        </div>
-        <div class="flex flex-col gap-1.5">
-          <NuxtLink
-            v-for="reminder in upcomingReminders"
-            :key="reminder.identifier"
-            to="/reminders"
-            class="group flex items-start gap-2.5 px-3 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-800/60 hover:bg-rose-50 dark:hover:bg-rose-950/30 border border-transparent hover:border-rose-100 dark:hover:border-rose-900/40 transition-all"
-          >
-            <UIcon
-              :name="
-                reminder.recurring ? 'heroicons:arrow-path' : 'heroicons:clock'
-              "
-              class="size-3.5 text-rose-400 shrink-0 mt-0.5"
-            />
-            <div class="flex-1 min-w-0">
-              <p
-                class="text-xs font-medium text-gray-700 dark:text-gray-300 truncate group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors"
-              >
-                {{ reminder.title }}
-              </p>
-              <p class="text-xs text-gray-400 mt-0.5">
-                {{ formatRemindAt(reminder.remindAt) }}
-              </p>
-            </div>
-            <span
-              class="text-xs font-semibold text-rose-400 dark:text-rose-500 shrink-0 mt-0.5"
-            >
-              {{ timeUntil(reminder.remindAt) }}
-            </span>
-          </NuxtLink>
-        </div>
-      </section>
-
-      <section v-else>
-        <h2
-          class="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-3"
-        >
-          Reminders
-        </h2>
+      <section class="mb-5 mt-auto">
         <div class="flex flex-col items-center py-6 text-center">
-          <UIcon
-            name="heroicons:bell-slash"
-            class="size-7 text-gray-300 dark:text-gray-700 mb-2"
-          />
-          <p class="text-xs text-gray-400">No upcoming reminders</p>
-          <NuxtLink
-            to="/reminders/create-reminder"
-            class="text-xs text-accent-500 hover:underline mt-1"
-            >Set one up</NuxtLink
-          >
+          <AppGreeting />
         </div>
       </section>
     </template>

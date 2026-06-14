@@ -178,10 +178,12 @@ const handleTransfer = async (targetWorkspaceId: string) => {
         >
           line {{ codeMatchInfo.startLine }}
         </div>
+        <!-- eslint-disable-next-line vue/no-v-html -->
         <pre class="p-3"><code v-html="codeMatchHtml" /></pre>
       </div>
 
       <!-- Normal syntax-highlighted preview -->
+      <!-- eslint-disable-next-line vue/no-v-html -->
       <pre
         v-else
         :class="[codeThemeClass, 'rounded-md p-3 text-xs overflow-x-auto']"
