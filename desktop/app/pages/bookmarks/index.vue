@@ -126,8 +126,8 @@ async function handleCreate(payload: {
     <template #primary_cta>
       <!-- Desktop: full label -->
       <div
-        class="hidden md:flex items-center justify-end"
         v-if="bookmarkStore.bookmarks.length !== 0"
+        class="hidden md:flex items-center justify-end"
       >
         <button
           class="flex items-center gap-2 py-2 px-4 bg-accent-500 text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors"
@@ -150,14 +150,14 @@ async function handleCreate(payload: {
     <template #main_content>
       <div class="flex items-center gap-2 mb-1">
         <BookmarkTagFilters
+          v-if="bookmarkStore.bookmarks.length !== 0"
           v-model="activeTag"
           :tags="TAGS"
           class="flex-1"
-          v-if="bookmarkStore.bookmarks.length !== 0"
         />
         <UDropdownMenu
-          :items="sortItems"
           v-if="bookmarkStore.bookmarks.length !== 0"
+          :items="sortItems"
           size="sm"
           :ui="{
             content:
@@ -205,9 +205,9 @@ async function handleCreate(payload: {
         </p>
 
         <UButton
-          @click="showAddModal = true"
           variant="link"
           class="text-xs text-accent-500 hover:text-accent-600 font-medium cursor-pointer"
+          @click="showAddModal = true"
         >
           Create bookmark
         </UButton>
