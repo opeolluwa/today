@@ -152,6 +152,7 @@ export const useReminderStore = defineStore("reminder_store", {
         remind_at: r.remindAt,
         created_at: r.createdAt,
         updated_at: r.updatedAt,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         workspace_identifier: (r as any).workspaceIdentifier ?? null,
       }));
       const query = gql`

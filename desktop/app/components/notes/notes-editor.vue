@@ -142,6 +142,7 @@ const initialContent = computed(() => {
   return marked.parse(raw) as string;
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function handleUpdate({ editor }: { editor: any }) {
   model.value = DOMPurify.sanitize(editor.getHTML());
 }

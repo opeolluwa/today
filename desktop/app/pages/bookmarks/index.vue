@@ -271,11 +271,13 @@ async function handleCreate(payload: {
         :tag-counts="bookmarkStore.tagCounts"
       />
     </template>
-  </NuxtLayout>
 
-  <BookmarkAddModal
-    v-model:open="showAddModal"
-    :tags="TAGS.slice(1) as { label: string; value: BookmarkTag }[]"
-    @create="handleCreate"
-  />
+    <template #modal_content>
+      <BookmarkAddModal
+        v-model:open="showAddModal"
+        :tags="TAGS.slice(1) as { label: string; value: BookmarkTag }[]"
+        @create="handleCreate"
+      />
+    </template>
+  </NuxtLayout>
 </template>

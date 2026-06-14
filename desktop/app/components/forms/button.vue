@@ -12,16 +12,6 @@
 </template>
 
 <script setup lang="ts">
-type Color =
-  | "primary"
-  | "error"
-  | "secondary"
-  | "success"
-  | "info"
-  | "warning"
-  | "neutral"
-  | undefined;
-type Type = "button" | "submit" | "reset" | undefined;
 defineProps({
   type: {
     type: String as PropType<"button" | "submit" | "reset">,

@@ -114,6 +114,7 @@ export const useRecycleBinStore = defineStore("recycle_bin_store", {
         item_type: e.itemType,
         payload: e.payload,
         deleted_at: e.deletedAt,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         workspace_identifier: (e as any).workspaceIdentifier ?? null,
       }));
       const query = gql`

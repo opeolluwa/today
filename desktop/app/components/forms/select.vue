@@ -8,7 +8,7 @@ defineProps<{
   placeholder?: string;
   hint?: string;
   disabled?: boolean;
-  items: any[];
+  items: string[] | { label: string; value: string }[];
 }>();
 
 const model = defineModel<string>();
