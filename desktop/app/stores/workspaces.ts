@@ -186,6 +186,7 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
         is_default: w.isDefault,
         is_hidden: w.isHidden,
         is_secured: w.isSecured,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         password_hash: (w as any).passwordHash ?? null,
       }));
       const query = gql`
@@ -254,6 +255,7 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
                 is_default: workspace.isDefault,
                 is_hidden: workspace.isHidden,
                 is_secured: workspace.isSecured,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 password_hash: (workspace as any).passwordHash ?? null,
               },
             ];

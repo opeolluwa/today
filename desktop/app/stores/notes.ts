@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
 
-type SyncResult = {
+type _SyncResult = {
   success: boolean;
   error_message: string | null;
   identifier: string;
@@ -166,6 +166,7 @@ export const useNoteStore = defineStore("notes_store", {
         categories: n.categories,
         created_at: n.createdAt,
         updated_at: n.updatedAt,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         workspace_identifier: (n as any).workspaceIdentifier ?? null,
       }));
       const query = gql`

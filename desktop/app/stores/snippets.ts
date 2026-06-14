@@ -153,6 +153,7 @@ export const useSnippetStore = defineStore("snippets_store", {
         is_pinned: s.isPinned,
         created_at: s.createdAt,
         updated_at: s.updatedAt,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         workspace_identifier: (s as any).workspaceIdentifier ?? null,
       }));
       const query = gql`

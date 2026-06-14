@@ -125,7 +125,10 @@ async function handleCreate(payload: {
   <NuxtLayout name="default">
     <template #primary_cta>
       <!-- Desktop: full label -->
-      <div class="hidden md:flex items-center justify-end">
+      <div
+        v-if="bookmarkStore.bookmarks.length !== 0"
+        class="hidden md:flex items-center justify-end"
+      >
         <button
           class="flex items-center gap-2 py-2 px-4 bg-accent-500 text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors"
           @click="showAddModal = true"
@@ -146,8 +149,14 @@ async function handleCreate(payload: {
 
     <template #main_content>
       <div class="flex items-center gap-2 mb-1">
-        <BookmarkTagFilters v-model="activeTag" :tags="TAGS" class="flex-1" />
+        <BookmarkTagFilters
+          v-if="bookmarkStore.bookmarks.length !== 0"
+          v-model="activeTag"
+          :tags="TAGS"
+          class="flex-1"
+        />
         <UDropdownMenu
+          v-if="bookmarkStore.bookmarks.length !== 0"
           :items="sortItems"
           size="sm"
           :ui="{
@@ -192,8 +201,16 @@ async function handleCreate(payload: {
           No bookmarks yet
         </p>
         <p class="text-xs text-gray-400 dark:text-gray-500 max-w-xs">
-          Save links you want to revisit. Click "Add Bookmark" to get started.
+          Save links you want to revisit.
         </p>
+
+        <UButton
+          variant="link"
+          class="text-xs text-accent-500 hover:text-accent-600 font-medium cursor-pointer"
+          @click="showAddModal = true"
+        >
+          Create bookmark
+        </UButton>
       </div>
 
       <!-- Empty state: search / tag filter has no results -->
@@ -254,11 +271,13 @@ async function handleCreate(payload: {
         :tag-counts="bookmarkStore.tagCounts"
       />
     </template>
-  </NuxtLayout>
 
-  <BookmarkAddModal
-    v-model:open="showAddModal"
-    :tags="TAGS.slice(1) as { label: string; value: BookmarkTag }[]"
-    @create="handleCreate"
-  />
+    <template #modal_content>
+      <BookmarkAddModal
+        v-model:open="showAddModal"
+        :tags="TAGS.slice(1) as { label: string; value: BookmarkTag }[]"
+        @create="handleCreate"
+      />
+    </template>
+  </NuxtLayout>
 </template>

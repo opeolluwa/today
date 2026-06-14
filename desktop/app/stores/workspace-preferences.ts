@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
 import { getWorkspaceMeta } from "~/composables/getWorkspaceMeta";
-import gql from "graphql-tag";
 
 export interface UserPreference {
   identifier: string;

@@ -192,6 +192,7 @@ export const useTodoStore = defineStore("todo_store", {
         created_at: t.createdAt,
         updated_at: t.updatedAt,
         due_time: t.time ?? null,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         workspace_identifier: (t as any).workspaceIdentifier ?? null,
       }));
       const query = gql`

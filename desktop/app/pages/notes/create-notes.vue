@@ -31,7 +31,7 @@ const wordCount = computed(() => {
   return text.split(/\s+/).filter(Boolean).length;
 });
 
-const readTime = computed(() => Math.max(1, Math.ceil(wordCount.value / 200)));
+const _readTime = computed(() => Math.max(1, Math.ceil(wordCount.value / 200)));
 
 const charCount = computed(() => {
   return content.value.replace(/<[^>]*>/g, "").replace(/\s/g, "").length;
