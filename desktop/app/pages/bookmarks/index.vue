@@ -125,7 +125,10 @@ async function handleCreate(payload: {
   <NuxtLayout name="default">
     <template #primary_cta>
       <!-- Desktop: full label -->
-      <div class="hidden md:flex items-center justify-end">
+      <div
+        class="hidden md:flex items-center justify-end"
+        v-if="bookmarkStore.bookmarks.length !== 0"
+      >
         <button
           class="flex items-center gap-2 py-2 px-4 bg-accent-500 text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors"
           @click="showAddModal = true"
@@ -146,9 +149,15 @@ async function handleCreate(payload: {
 
     <template #main_content>
       <div class="flex items-center gap-2 mb-1">
-        <BookmarkTagFilters v-model="activeTag" :tags="TAGS" class="flex-1" />
+        <BookmarkTagFilters
+          v-model="activeTag"
+          :tags="TAGS"
+          class="flex-1"
+          v-if="bookmarkStore.bookmarks.length !== 0"
+        />
         <UDropdownMenu
           :items="sortItems"
+          v-if="bookmarkStore.bookmarks.length !== 0"
           size="sm"
           :ui="{
             content:
@@ -192,8 +201,16 @@ async function handleCreate(payload: {
           No bookmarks yet
         </p>
         <p class="text-xs text-gray-400 dark:text-gray-500 max-w-xs">
-          Save links you want to revisit. Click "Add Bookmark" to get started.
+          Save links you want to revisit.
         </p>
+
+        <UButton
+          @click="showAddModal = true"
+          variant="link"
+          class="text-xs text-accent-500 hover:text-accent-600 font-medium cursor-pointer"
+        >
+          Create bookmark
+        </UButton>
       </div>
 
       <!-- Empty state: search / tag filter has no results -->

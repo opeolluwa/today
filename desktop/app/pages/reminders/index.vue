@@ -55,7 +55,7 @@ onUnmounted(() => clearSearch());
 <template>
   <NuxtLayout name="default">
     <template #primary_cta>
-      <PrimaryCta
+      <AppPrimaryCta
         v-if="reminderStore.reminders.length !== 0"
         label="New Reminder"
         icon="heroicons:plus"
