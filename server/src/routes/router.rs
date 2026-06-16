@@ -8,11 +8,13 @@ use crate::{
     routes::{
         app::public_routes, auth::authentication_routes, country::country_routes,
         notification::notification_routes, users::user_routes,
+        invitation::invitation_routes,
     },
     services::{
         authentication_service::AuthenticationService, country_service::CountryService,
         notification_service::NotificationService, root_service::RootService,
         user_service::UserService,
+        invitation_service::InvitationService,
     },
     states::ServicesState,
 };
@@ -24,6 +26,7 @@ pub fn load_routes(db_conn: &Arc<DatabaseConnection>) -> Router {
         auth_service: AuthenticationService::init(db_conn),
         country_service: CountryService::init(db_conn),
         notification_service: NotificationService::init(db_conn),
+        invitation_service: InvitationService::init(db_conn),
     };
 
     Router::new()
@@ -32,6 +35,7 @@ pub fn load_routes(db_conn: &Arc<DatabaseConnection>) -> Router {
         .nest("/countries", country_routes(state.clone()))
         .nest("/user", user_routes(state.clone()))
         .nest("/notifications", notification_routes(state.clone()))
+        .nest("/invitations", invitation_routes(state.clone()))
         .fallback(async || {
             ApiResponseBuilder::<()>::new()
                 .message(

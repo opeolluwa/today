@@ -31,6 +31,9 @@ pub enum AppError {
 
     #[error(transparent)]
     FileSystemError(#[from] std::io::Error),
+
+    #[error("Conflict: {0}")]
+    Conflict(String),
 }
 
 impl AppError {
@@ -45,6 +48,7 @@ impl AppError {
             AppError::InternalError(_) => StatusCode::INTERNAL_SERVER_ERROR,
             AppError::KernelError(_) => StatusCode::INTERNAL_SERVER_ERROR,
             AppError::FileSystemError(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            AppError::Conflict(_) => StatusCode::CONFLICT,
         }
     }
 }
