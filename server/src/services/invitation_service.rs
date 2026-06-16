@@ -27,7 +27,7 @@ impl InvitationService {
     if let Some(existing) = InvitationRepository::find_by_email_and_workspace(db, workspace_id, &payload.email).await.map_err(|e| AppError::DatabaseError(e.to_string()))?
      {
       if existing.status == "pending" {
-        return Err(AppError::Conflict("An invitation is already pending for this email".into()));
+        return Err(AppError::OperationFailed("An invitation is already pending for this email".into()));
       }
     }
 
