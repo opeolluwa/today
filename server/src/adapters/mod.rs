@@ -10,3 +10,4 @@ pub mod repository;
 pub mod request;
 pub mod users;
 pub mod wait_list;
+pub mod invitation;
