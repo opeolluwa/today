@@ -207,52 +207,13 @@ onMounted(async () => {
 <template>
   <NuxtLayout name="default">
     <template #page_title>
-      <UButton
-        variant="ghost"
-        color="neutral"
-        icon="heroicons:arrow-long-left"
-        @click="router.back()"
-      />
-    </template>
-    <template #main_content>
-      <!-- Not found -->
-      <div
-        v-if="!original && !noteStore.loading"
-        class="flex flex-col items-center justify-center py-20 text-center"
-      >
-        <div class="mb-4 p-3 rounded-full bg-gray-100 dark:bg-gray-800">
-          <UIcon name="heroicons:document-text" class="size-7 text-gray-400" />
-        </div>
-        <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          Note not found
-        </h3>
-        <button
-          class="text-xs text-accent-500 hover:text-accent-600 font-medium mt-2"
-          @click="router.push('/notes')"
-        >
-          Back to notes
-        </button>
-      </div>
-
-      <!-- Loading -->
-      <div
-        v-else-if="noteStore.loading && !original"
-        class="max-w-2xl mx-auto flex flex-col gap-4"
-      >
-        <USkeleton class="h-10 rounded-lg w-64" />
-        <USkeleton class="h-4 rounded-lg w-32" />
-        <USkeleton class="h-96 rounded-lg" />
-      </div>
-
-      <div v-else-if="original">
-        <div class="mx-auto pb-20">
-          <!-- Title -->
+        <!-- Title -->
           <textarea
             v-model="title"
             placeholder="Untitled"
             rows="1"
             :disabled="submitting"
-            class="w-full resize-none bg-transparent outline-none text-3xl font-bold text-gray-900 dark:text-gray-50 placeholder:text-gray-300 dark:placeholder:text-gray-600 leading-tight mb-4 overflow-hidden"
+            class="w-full resize-none bg-transparent outline-none text-3xl font-bold text-gray-900 dark:text-gray-200 placeholder:text-gray-300 dark:placeholder:text-gray-600 leading-tight mb-4 overflow-hidden"
             @input="
               ($event.target as HTMLTextAreaElement).style.height = 'auto';
               ($event.target as HTMLTextAreaElement).style.height =
@@ -286,6 +247,40 @@ onMounted(async () => {
               @blur="addTag"
             >
           </div>
+    </template>
+    <template #main_content>
+      <!-- Not found -->
+      <div
+        v-if="!original && !noteStore.loading"
+        class="flex flex-col items-center justify-center py-20 text-center"
+      >
+        <div class="mb-4 p-3 rounded-full bg-gray-100 dark:bg-gray-800">
+          <UIcon name="heroicons:document-text" class="size-7 text-gray-400" />
+        </div>
+        <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          Note not found
+        </h3>
+        <button
+          class="text-xs text-accent-500 hover:text-accent-600 font-medium mt-2"
+          @click="router.push('/notes')"
+        >
+          Back to notes
+        </button>
+      </div>
+
+      <!-- Loading -->
+      <div
+        v-else-if="noteStore.loading && !original"
+        class="max-w-2xl mx-auto flex flex-col gap-4"
+      >
+        <USkeleton class="h-10 rounded-lg w-64" />
+        <USkeleton class="h-4 rounded-lg w-32" />
+        <USkeleton class="h-96 rounded-lg" />
+      </div>
+
+      <div v-else-if="original">
+        <div class="mx-auto pb-20">
+ 
 
           <!-- Divider -->
           <div class="border-t border-gray-100 dark:border-gray-800 mb-5" />

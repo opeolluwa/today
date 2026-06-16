@@ -113,59 +113,52 @@ onBeforeRouteLeave(async () => {
 
 <template>
   <NuxtLayout name="default">
-    <!-- suppress default page title -->
     <template #page_title>
-      <UButton
-        variant="ghost"
-        color="neutral"
-        icon="heroicons:arrow-long-left"
-        @click="router.back()"
+      <!-- Title -->
+      <textarea
+        v-model="title"
+        placeholder="Title"
+        rows="1"
+        :disabled="submitting"
+        autofocus
+        class="w-full resize-none bg-transparent outline-none text-3xl font-bold text-gray-900 dark:text-gray-50 placeholder:text-gray-400 dark:placeholder:text-gray-500 leading-snug mb-2 overflow-hidden"
+        @input="
+          ($event.target as HTMLTextAreaElement).style.height = 'auto';
+          ($event.target as HTMLTextAreaElement).style.height =
+            ($event.target as HTMLTextAreaElement).scrollHeight + 'px';
+        "
       />
+
+      <!-- Tags row -->
+      <div class="flex flex-wrap items-center gap-1.5 mb-8 min-h-5">
+        <span
+          v-for="tag in categories"
+          :key="tag"
+          class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-50 dark:bg-accent-950 text-accent-600 dark:text-accent-300 text-xs font-medium"
+        >
+          {{ tag }}
+          <button
+            class="text-accent-400 hover:text-accent-600 dark:hover:text-accent-200 transition-colors leading-none"
+            @click="removeTag(tag)"
+          >
+            <UIcon name="heroicons:x-mark" class="size-3" />
+          </button>
+        </span>
+        <input
+          v-model="tagInput"
+          placeholder="Add tag…"
+          autocapitalize="off"
+          autocorrect="off"
+          spellcheck="false"
+          class="bg-transparent outline-none text-xs text-gray-400 dark:text-gray-500 placeholder:text-gray-300 dark:placeholder:text-gray-400 w-20 min-w-0"
+          @keydown="onTagKeydown"
+          @blur="addTag"
+        />
+      </div>
     </template>
 
     <template #main_content>
       <div class="pb-20">
-        <!-- Title -->
-        <textarea
-          v-model="title"
-          placeholder="Untitled"
-          rows="1"
-          :disabled="submitting"
-          class="w-full resize-none bg-transparent outline-none text-4xl font-bold text-gray-900 dark:text-gray-50 placeholder:text-gray-200 dark:placeholder:text-gray-200 leading-snug mb-3 overflow-hidden"
-          @input="
-            ($event.target as HTMLTextAreaElement).style.height = 'auto';
-            ($event.target as HTMLTextAreaElement).style.height =
-              ($event.target as HTMLTextAreaElement).scrollHeight + 'px';
-          "
-        />
-
-        <!-- Tags row -->
-        <div class="flex flex-wrap items-center gap-1.5 mb-8 min-h-5">
-          <span
-            v-for="tag in categories"
-            :key="tag"
-            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-50 dark:bg-accent-950 text-accent-600 dark:text-accent-300 text-xs font-medium"
-          >
-            {{ tag }}
-            <button
-              class="text-accent-400 hover:text-accent-600 dark:hover:text-accent-200 transition-colors leading-none"
-              @click="removeTag(tag)"
-            >
-              <UIcon name="heroicons:x-mark" class="size-3" />
-            </button>
-          </span>
-          <input
-            v-model="tagInput"
-            placeholder="Add tag…"
-            autocapitalize="off"
-            autocorrect="off"
-            spellcheck="false"
-            class="bg-transparent outline-none text-xs text-gray-400 dark:text-gray-500 placeholder:text-gray-300 dark:placeholder:text-gray-400 w-20 min-w-0"
-            @keydown="onTagKeydown"
-            @blur="addTag"
-          >
-        </div>
-
         <!-- Editor -->
         <NotesEditor v-model="content" />
 
