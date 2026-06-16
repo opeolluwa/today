@@ -153,7 +153,7 @@ onBeforeRouteLeave(async () => {
           class="bg-transparent outline-none text-xs text-gray-400 dark:text-gray-500 placeholder:text-gray-300 dark:placeholder:text-gray-400 w-20 min-w-0"
           @keydown="onTagKeydown"
           @blur="addTag"
-        />
+        >
       </div>
     </template>
 
