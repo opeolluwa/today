@@ -149,7 +149,7 @@ function handleUpdate({ editor }: { editor: any }) {
 </script>
 
 <template>
-  <div :class="{ 'dm-theme-dark': isDark }" :style="dmVars" class="h-full">
+  <div :class="{ 'dm-theme-dark': isDark }" :style="dmVars">
     <Domternal
       :extensions="extensions"
       :content="initialContent"
