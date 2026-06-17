@@ -43,7 +43,7 @@ impl InvitationService {
     ).await.map_err(|e| AppError::DatabaseError(e.to_string()))?;
 
     Ok(InviteWorkspaceMemberResponse {
-      invitation_id: invitation.id.to_string(),
+      invitation_id: invitation.identifier.to_string(),
       email: invitation.email,
       status: invitation.status,
     })

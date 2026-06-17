@@ -21,7 +21,7 @@ impl InvitationRepository {
 
     pub async fn create(db: &DatabaseConnection, workspace_id: Uuid, email: String, first_name: Option<String>, last_name: Option<String>, token: String) -> Result<invitation::Model, DatabaseError> {
       let model = ActiveModel {
-        id: Set(Uuid::new_v4()),
+        identifier: Set(Uuid::new_v4()),
         workspace_id: Set(workspace_id),
         email: Set(email),
         first_name: Set(first_name),

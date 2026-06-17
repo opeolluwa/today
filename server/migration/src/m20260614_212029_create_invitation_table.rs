@@ -6,7 +6,7 @@ pub struct Migration;
 #[derive(DeriveIden)]
 enum Invitation {
     Table,
-    Id,
+    Identifier,
     WorkspaceId,
     Email,
     FirstName,
@@ -31,7 +31,7 @@ impl MigrationTrait for Migration {
                 Table::create()
                     .table(Invitation::Table)
                     .if_not_exists()
-                    .col(ColumnDef::new(Invitation::Id).uuid().not_null().primary_key())
+                    .col(ColumnDef::new(Invitation::Identifier).uuid().not_null().primary_key())
                     .col(ColumnDef::new(Invitation::WorkspaceId).uuid().not_null())
                     .col(ColumnDef::new(Invitation::Email).string().not_null())
                     .col(ColumnDef::new(Invitation::FirstName).string().null())
