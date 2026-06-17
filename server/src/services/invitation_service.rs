@@ -20,11 +20,14 @@ impl InvitationService {
     &self,
     workspace_id: Uuid,
     _requester_id: &Uuid,
-    payload: InviteWorkspaceMemberRequest,
+    payload: &InviteWorkspaceMemberRequest,
   ) -> Result<InviteWorkspaceMemberResponse, AppError> {
     let db = self.db.as_ref();
 
-    if let Some(existing) = InvitationRepository::find_by_email_and_workspace(db, workspace_id, &payload.email).await.map_err(|e| AppError::DatabaseError(e.to_string()))?
+    if let Some(existing) = InvitationRepository::find_by_email_and_workspace(
+      db, 
+      workspace_id, 
+      &payload.email).await.map_err(|e| AppError::DatabaseError(e.to_string()))?
      {
       if existing.status == "pending" {
         return Err(AppError::OperationFailed("An invitation is already pending for this email".into()));
@@ -36,10 +39,8 @@ impl InvitationService {
     let invitation = InvitationRepository::create(
       db,
       workspace_id,
-      payload.email,
-      payload.first_name,
-      payload.last_name,
-      token,
+      payload,
+      &token,
     ).await.map_err(|e| AppError::DatabaseError(e.to_string()))?;
 
     Ok(InviteWorkspaceMemberResponse {

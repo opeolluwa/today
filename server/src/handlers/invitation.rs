@@ -12,7 +12,7 @@ pub async fn invite_workspace_member(
 ) -> Result<(StatusCode, Json<InviteWorkspaceMemberResponse>), AppError> {
   let requester_id = claims.user_identifier;
 
-  let response = invitation_service.invite_member(workspace_id, &requester_id, data).await?;
+  let response = invitation_service.invite_member(workspace_id, &requester_id, &data).await?;
  
   Ok((StatusCode::CREATED, Json(response)))
 }

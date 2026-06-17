@@ -11,7 +11,7 @@ pub struct InviteWorkspaceMemberRequest {
   pub last_name: Option<String>,
 }
 
-// Response body returned after successful invitation
+
 #[derive(Debug, Serialize)]
 pub struct InviteWorkspaceMemberResponse {
   pub invitation_id: String,
