@@ -60,7 +60,10 @@ body {
   overflow: hidden;
   overscroll-behavior: none;
   background-color: transparent;
-  @apply mt-24;
+}
+
+* {
+  user-select: none;
 }
 
 /*
@@ -185,7 +188,3 @@ h6.notes_heading {
   height: 12rem;
 }
 
-.dm-editor {
-  height: 65vh;
-  overflow: scroll;
-}
