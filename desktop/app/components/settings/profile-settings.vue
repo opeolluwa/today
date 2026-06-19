@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useUserPreferenceStore } from "~/stores/workspace-preferences";
-import AppInput from "../forms/input.vue";
 const store = useUserPreferenceStore();
 
 const form = reactive({
@@ -59,7 +58,7 @@ async function handleSave() {
       </div>
       <div class="flex flex-col gap-4">
         <div class="grid grid-cols-2 gap-3">
-          <AppInput
+          <FormsBaseInput
             v-model="form.firstName"
             type="text"
             placeholder="John"
@@ -67,7 +66,7 @@ async function handleSave() {
             name="first name"
           />
 
-          <AppInput
+          <FormsBaseInput
             v-model="form.lastName"
             type="text"
             placeholder="Doe"
@@ -75,7 +74,7 @@ async function handleSave() {
             name="last name"
           />
         </div>
-        <AppInput
+        <FormsBaseInput
           v-model="form.email"
           type="email"
           placeholder="john@example.com"
@@ -84,13 +83,13 @@ async function handleSave() {
         />
       </div>
       <div class="mt-5 flex justify-end">
-        <AppButton
+        <FormsBaseButton
           :disabled="saving"
           class="px-4 py-2 w-fit bg-accent-500 text-white text-sm font-medium rounded-lg hover:bg-accent-600 transition-colors disabled:opacity-50"
           @click="handleSave"
         >
           {{ saving ? "Saving…" : "Save changes" }}
-        </AppButton>
+        </FormsBaseButton>
       </div>
     </div>
   </div>

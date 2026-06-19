@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import type { BookmarkTag, CreateBookmarkPayload } from "~/stores/bookmarks";
-import AppInput from "../forms/input.vue";
-import AppSelect from "../forms/select.vue";
 import _ from "lodash";
 
 defineProps<{
@@ -42,7 +40,7 @@ async function handleSubmit() {
   <UModal v-model:open="open" title="Add Bookmark">
     <template #body>
       <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
-        <AppInput
+        <FormsBaseInput
           v-model="form.title"
           placeholder="Bookmark title"
           label="Title"
@@ -50,7 +48,7 @@ async function handleSubmit() {
           :disabled="submitting"
         />
 
-        <AppInput
+        <FormsBaseInput
           v-model="form.url"
           label="URL"
           name="bookmark url"
@@ -58,7 +56,7 @@ async function handleSubmit() {
           :disabled="submitting"
         />
 
-        <AppSelect
+        <FormsBaseSelect
           v-model="form.tag"
           :items="
             tags.map((t) => ({ label: _.capitalize(t.label), value: t.value }))
