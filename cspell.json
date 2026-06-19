@@ -15,7 +15,8 @@
     "shiki",
     "tabular",
     "tauri",
-    "thiserror"
+    "thiserror",
+    "uilib"
   ],
   "userWords": [
     "Nuxt",

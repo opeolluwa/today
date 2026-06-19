@@ -12,6 +12,8 @@
 </template>
 
 <script setup lang="ts">
+import { PropType } from 'vue';
+
 defineProps({
   type: {
     type: String as PropType<"button" | "submit" | "reset">,
