@@ -1,0 +1,101 @@
+{
+  "name": "colortranslator",
+  "version": "5.0.0",
+  "description": "A JavaScript library, written in TypeScript, to convert among different color models",
+  "main": "index.js",
+  "module": "esm/index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./index.d.ts",
+        "default": "./index.js"
+      },
+      "import": {
+        "types": "./esm/index.d.ts",
+        "default": "./esm/index.js"
+      }
+    }
+  },
+  "files": [
+    "esm/**/*",
+    "web/**/*",
+    "index.d.ts",
+    "index.js"
+  ],
+  "scripts": {
+    "test:ts": "tsc --noEmit",
+    "test": "jest --verbose",
+    "lint": "eslint \"src/**/*.{js,ts}\" \"tests/**/*.ts\"",
+    "clean": "./scripts/clean.sh",
+    "finish": "./scripts/finish.sh",
+    "build": "pnpm clean && rollup --config rollup.config.js --bundleConfigAsCjs && pnpm finish",
+    "demo": "webpack serve --open --config webpack.demo.config.js",
+    "docs": "webpack --config webpack.demo.publish.js --mode production && pnpm build",
+    "compile:regexps": "pnpm plop",
+    "prepare": "pnpm build",
+    "prepublishOnly": "pnpm lint && pnpm test",
+    "version": "git add .",
+    "postversion": "git push && git push --tags"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elchininet/ColorTranslator.git"
+  },
+  "keywords": [
+    "color",
+    "color-converter",
+    "color-translator",
+    "color-manipulation",
+    "css-color",
+    "css-color-convert",
+    "rgb",
+    "rgba",
+    "hex",
+    "hexadecimal",
+    "hsl",
+    "hsla",
+    "cmyk",
+    "typescript"
+  ],
+  "author": "ElChiniNet",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/elchininet/ColorTranslator/issues"
+  },
+  "homepage": "https://github.com/elchininet/ColorTranslator#readme",
+  "devDependencies": {
+    "@rollup/plugin-terser": "^0.4.4",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.15.29",
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^13.0.0",
+    "css-loader": "^7.1.2",
+    "eslint": "^9.27.0",
+    "globals": "^16.1.0",
+    "google-code-prettify": "^1.0.5",
+    "html-webpack-plugin": "^5.6.3",
+    "jest": "^29.7.0",
+    "mini-css-extract-plugin": "^2.9.2",
+    "plop": "^4.0.1",
+    "rimraf": "^6.0.1",
+    "rollup": "^4.41.1",
+    "rollup-plugin-ts": "^3.4.5",
+    "sass": "^1.89.0",
+    "sass-loader": "^16.0.5",
+    "style-loader": "^4.0.0",
+    "ts-jest": "^29.3.4",
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.32.1",
+    "webpack": "^5.99.9",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.1",
+    "whatwg-fetch": "^3.6.20"
+  },
+  "pnpm": {
+    "overrides": {
+      "@babel/helpers@<7.26.10": ">=7.26.10"
+    }
+  }
+}

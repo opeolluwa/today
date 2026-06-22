@@ -1,0 +1,1 @@
+(function(e,t,n){Object.defineProperty(e,Symbol.toStringTag,{value:`Module`});function r(e,r={}){let{onError:i,fallbackValue:a=null}=r,o=(e,n)=>{try{return(0,t.jwtDecode)(e,n)}catch(e){return i==null||i(e),a}};return{header:(0,n.computed)(()=>o((0,n.toValue)(e),{header:!0})),payload:(0,n.computed)(()=>o((0,n.toValue)(e)))}}e.useJwt=r})(this.VueUse=this.VueUse||{},jwt_decode,Vue);

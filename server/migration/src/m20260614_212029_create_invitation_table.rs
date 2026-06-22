@@ -1,4 +1,4 @@
-use sea_orm_migration::{prelude::*, schema::*};
+use sea_orm_migration::prelude::*;
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -7,7 +7,7 @@ pub struct Migration;
 enum Invitation {
     Table,
     Identifier,
-    WorkspaceId,
+    WorkspaceIdentifier,
     Email,
     FirstName,
     LastName,
@@ -17,12 +17,6 @@ enum Invitation {
     CreatedAt,
 }
 
-// #[derive(DeriveIden)]
-// enum Workspace {
-//     Table,
-//     Id,
-// }
-
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
@@ -31,21 +25,40 @@ impl MigrationTrait for Migration {
                 Table::create()
                     .table(Invitation::Table)
                     .if_not_exists()
-                    .col(ColumnDef::new(Invitation::Identifier).uuid().not_null().primary_key())
-                    .col(ColumnDef::new(Invitation::WorkspaceId).uuid().not_null())
+                    .col(
+                        ColumnDef::new(Invitation::Identifier)
+                            .uuid()
+                            .not_null()
+                            .primary_key(),
+                    )
+                    .col(
+                        ColumnDef::new(Invitation::WorkspaceIdentifier)
+                            .uuid()
+                            .not_null(),
+                    )
                     .col(ColumnDef::new(Invitation::Email).string().not_null())
                     .col(ColumnDef::new(Invitation::FirstName).string().null())
                     .col(ColumnDef::new(Invitation::LastName).string().null())
-                    .col(ColumnDef::new(Invitation::Token).string().not_null().unique_key())
-                    .col(ColumnDef::new(Invitation::Status).string().not_null().default("pending"))
+                    .col(
+                        ColumnDef::new(Invitation::Token)
+                            .string()
+                            .not_null()
+                            .unique_key(),
+                    )
+                    .col(
+                        ColumnDef::new(Invitation::Status)
+                            .string()
+                            .not_null()
+                            .default("pending"),
+                    )
                     .col(ColumnDef::new(Invitation::ExpiresAt).timestamp().not_null())
                     .col(ColumnDef::new(Invitation::CreatedAt).timestamp().not_null())
-                    // .foreign_key(
-                    //     ForeignKey::create()
-                    //         .from(Invitation::Table, Invitation::WorkspaceId)
-                    //         .to(Workspace::Table, Workspace::Id)
-                    //         .on_delete(ForeignKeyAction::Cascade)
-                    // )
+                    .foreign_key(
+                        ForeignKey::create()
+                            .from(Invitation::Table, Invitation::WorkspaceIdentifier)
+                            .to("workspaces", "identifier")
+                            .on_delete(ForeignKeyAction::Cascade),
+                    )
                     .to_owned(),
             )
             .await

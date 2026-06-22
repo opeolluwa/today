@@ -1,0 +1,12 @@
+{
+  "name": "@nuxt/icon",
+  "configKey": "icon",
+  "compatibility": {
+    "nuxt": ">=4.0.0"
+  },
+  "version": "2.2.3",
+  "builder": {
+    "@nuxt/module-builder": "1.0.2",
+    "unbuild": "3.6.1"
+  }
+}

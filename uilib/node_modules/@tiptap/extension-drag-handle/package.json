@@ -1,0 +1,62 @@
+{
+  "name": "@tiptap/extension-drag-handle",
+  "version": "3.27.1",
+  "description": "drag handle extension for tiptap",
+  "keywords": [
+    "tiptap",
+    "tiptap extension"
+  ],
+  "homepage": "https://tiptap.dev/docs/editor/extensions/functionality/drag-handle",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ueberdosis/tiptap",
+    "directory": "packages/extension-drag-handle"
+  },
+  "bugs": {
+    "url": "https://github.com/ueberdosis/tiptap/issues"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/ueberdosis"
+  },
+  "files": [
+    "src",
+    "dist"
+  ],
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": {
+        "import": "./dist/index.d.ts",
+        "require": "./dist/index.d.cts"
+      },
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "dependencies": {
+    "@floating-ui/dom": "^1.6.13"
+  },
+  "devDependencies": {
+    "@floating-ui/dom": "^1.6.13",
+    "@tiptap/y-tiptap": "^3.0.5",
+    "@tiptap/core": "^3.27.1",
+    "@tiptap/extension-collaboration": "^3.27.1",
+    "@tiptap/pm": "^3.27.1",
+    "@tiptap/extension-node-range": "^3.27.1"
+  },
+  "peerDependencies": {
+    "@tiptap/y-tiptap": "^3.0.5",
+    "@tiptap/core": "3.27.1",
+    "@tiptap/extension-collaboration": "3.27.1",
+    "@tiptap/extension-node-range": "3.27.1",
+    "@tiptap/pm": "3.27.1"
+  },
+  "scripts": {
+    "build": "tsup"
+  }
+}

@@ -1,0 +1,3 @@
+import AnimatePresence_vue_vue_type_script_setup_true_lang_default from "./AnimatePresence.vue_vue_type_script_setup_true_lang.mjs";
+var AnimatePresence_default = AnimatePresence_vue_vue_type_script_setup_true_lang_default;
+export { AnimatePresence_default as default };

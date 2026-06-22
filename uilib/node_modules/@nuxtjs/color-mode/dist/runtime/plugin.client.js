@@ -1,0 +1,116 @@
+import { computed, reactive, watch } from "vue";
+import { defineNuxtPlugin, useRouter, useHead, useState, useCookie } from "#imports";
+import { globalName, storageKey, dataValue, disableTransition, storage, cookieAttrs } from "#build/color-mode-options.mjs";
+let helper = window[globalName];
+if (import.meta.test && !helper) {
+  helper = {
+    preference: "light",
+    value: "light",
+    getColorScheme: () => "light",
+    addColorScheme: () => {
+    },
+    removeColorScheme: () => {
+    }
+  };
+}
+export default defineNuxtPlugin((nuxtApp) => {
+  const colorMode = useState("color-mode", () => reactive({
+    // For SPA mode or fallback
+    preference: helper.preference,
+    value: helper.value,
+    unknown: false,
+    forced: false
+  })).value;
+  if (dataValue) {
+    useHead({
+      htmlAttrs: { [`data-${dataValue}`]: computed(() => colorMode.value) }
+    });
+  }
+  useRouter().afterEach((to) => {
+    const forcedColorMode = to.meta.colorMode;
+    if (forcedColorMode && forcedColorMode !== "system") {
+      setColorModeValue(colorMode, forcedColorMode);
+      colorMode.forced = true;
+    } else {
+      if (forcedColorMode === "system") {
+        console.warn("You cannot force the colorMode to system at the page level.");
+      }
+      colorMode.forced = false;
+      const newValue = colorMode.preference === "system" ? helper.getColorScheme() : colorMode.preference;
+      setColorModeValue(colorMode, newValue);
+    }
+  });
+  let darkWatcher;
+  function watchMedia() {
+    if (darkWatcher || !window.matchMedia) {
+      return;
+    }
+    darkWatcher = window.matchMedia("(prefers-color-scheme: dark)");
+    darkWatcher.addEventListener("change", () => {
+      if (!colorMode.forced && colorMode.preference === "system") {
+        setColorModeValue(colorMode, helper.getColorScheme());
+      }
+    });
+  }
+  watch(() => colorMode.preference, (preference) => {
+    if (colorMode.forced) {
+      return;
+    }
+    if (preference === "system") {
+      setColorModeValue(colorMode, helper.getColorScheme());
+      watchMedia();
+    } else {
+      setColorModeValue(colorMode, preference);
+    }
+    setPreferenceToStorage(preference);
+  }, { immediate: true });
+  watch(() => colorMode.value, (newValue, oldValue) => {
+    let style;
+    if (disableTransition) {
+      style = window.document.createElement("style");
+      style.appendChild(document.createTextNode("*{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}"));
+      window.document.head.appendChild(style);
+    }
+    helper.removeColorScheme(oldValue);
+    helper.addColorScheme(newValue);
+    if (disableTransition) {
+      const _ = window.getComputedStyle(style).opacity;
+      document.head.removeChild(style);
+    }
+  });
+  if (colorMode.preference === "system") {
+    watchMedia();
+  }
+  nuxtApp.hook("app:mounted", () => {
+    if (colorMode.unknown) {
+      colorMode.preference = helper.preference;
+      setColorModeValue(colorMode, helper.value);
+      colorMode.unknown = false;
+    }
+  });
+  nuxtApp.provide("colorMode", colorMode);
+});
+function setColorModeValue(colorMode, value) {
+  colorMode.value = value;
+}
+function setPreferenceToStorage(preference) {
+  if (storage === "cookie") {
+    try {
+      const cookie = useCookie(storageKey, cookieAttrs);
+      cookie.value = preference;
+    } catch {
+    }
+    return;
+  }
+  if (storage === "sessionStorage") {
+    try {
+      window.sessionStorage?.setItem(storageKey, preference);
+    } catch {
+    }
+    return;
+  }
+  try {
+    window.localStorage?.setItem(storageKey, preference);
+  } catch {
+  }
+}

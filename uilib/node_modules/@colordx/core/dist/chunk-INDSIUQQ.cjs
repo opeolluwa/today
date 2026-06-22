@@ -1,0 +1,2 @@
+'use strict';var s=r=>{let n=Math.abs(r),e=n<=.04045?n/12.92:((n+.055)/1.055)**2.4;return r<0?-e:e},a=r=>{let n=Math.abs(r),e=n<=.0031308?12.92*n:1.055*n**(1/2.4)-.055;return r<0?-e:e},t=1.09929682680944,o=.018053968510807,b=r=>{let n=Math.abs(r),e=n<o*4.5?n/4.5:((n+t-1)/t)**(1/.45);return r<0?-e:e},c=r=>{let n=Math.abs(r),e=n<o?4.5*n:t*n**.45-(t-1);return r<0?-e:e};exports.a=s;exports.b=a;exports.c=b;exports.d=c;//# sourceMappingURL=chunk-INDSIUQQ.cjs.map
+//# sourceMappingURL=chunk-INDSIUQQ.cjs.map

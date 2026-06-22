@@ -1,0 +1,9 @@
+{
+  "name": "@nuxtjs/color-mode",
+  "version": "4.0.1",
+  "configKey": "colorMode",
+  "builder": {
+    "@nuxt/module-builder": "1.0.2",
+    "unbuild": "3.6.1"
+  }
+}

@@ -1,0 +1,143 @@
+const MotionComponentProps = {
+	"ignoreStrict": { type: Boolean },
+	"forwardMotionProps": {
+		type: Boolean,
+		default: false
+	},
+	"asChild": {
+		type: Boolean,
+		default: false
+	},
+	"whileDrag": { type: [
+		String,
+		Array,
+		Object
+	] },
+	"whileHover": { type: [
+		String,
+		Array,
+		Object
+	] },
+	"whilePress": { type: [
+		String,
+		Array,
+		Object
+	] },
+	"whileInView": { type: [
+		String,
+		Array,
+		Object
+	] },
+	"whileFocus": { type: [
+		String,
+		Array,
+		Object
+	] },
+	"custom": { type: [
+		String,
+		Number,
+		Object,
+		Array
+	] },
+	"initial": {
+		type: [
+			String,
+			Array,
+			Object,
+			Boolean
+		],
+		default: void 0
+	},
+	"animate": {
+		type: [
+			String,
+			Array,
+			Object
+		],
+		default: void 0
+	},
+	"exit": { type: [
+		String,
+		Array,
+		Object
+	] },
+	"variants": { type: Object },
+	"inherit": { type: Boolean },
+	"style": { type: Object },
+	"transformTemplate": { type: Function },
+	"transition": { type: Object },
+	"onAnimationComplete": { type: Function },
+	"onUpdate": { type: Function },
+	"layout": {
+		type: [Boolean, String],
+		default: false
+	},
+	"layoutId": {
+		type: String,
+		default: void 0
+	},
+	"layoutScroll": {
+		type: Boolean,
+		default: false
+	},
+	"layoutRoot": {
+		type: Boolean,
+		default: false
+	},
+	"data-framer-portal-id": { type: String },
+	"crossfade": {
+		type: Boolean,
+		default: true
+	},
+	"layoutDependency": {
+		type: null,
+		default: void 0
+	},
+	"onBeforeLayoutMeasure": { type: Function },
+	"onLayoutMeasure": { type: Function },
+	"onLayoutAnimationStart": { type: Function },
+	"onLayoutAnimationComplete": { type: Function },
+	"globalPressTarget": { type: Boolean },
+	"onPressStart": { type: Function },
+	"onPress": { type: Function },
+	"onPressCancel": { type: Function },
+	"onHoverStart": { type: Function },
+	"onHoverEnd": { type: Function },
+	"inViewOptions": { type: Object },
+	"onViewportEnter": { type: Function },
+	"onViewportLeave": { type: Function },
+	"drag": { type: [Boolean, String] },
+	"dragSnapToOrigin": { type: Boolean },
+	"dragDirectionLock": { type: Boolean },
+	"dragPropagation": { type: Boolean },
+	"dragConstraints": { type: [Boolean, Object] },
+	"dragElastic": {
+		type: [
+			Boolean,
+			Number,
+			Object
+		],
+		default: .5
+	},
+	"dragMomentum": {
+		type: Boolean,
+		default: true
+	},
+	"dragTransition": { type: Object },
+	"dragListener": {
+		type: Boolean,
+		default: true
+	},
+	"dragControls": { type: Object },
+	"onDragStart": { type: Function },
+	"onDragEnd": { type: Function },
+	"onDrag": { type: Function },
+	"onDirectionLock": { type: Function },
+	"onDragTransitionEnd": { type: Function },
+	"onMeasureDragConstraints": { type: Function },
+	"onPanSessionStart": { type: Function },
+	"onPanStart": { type: Function },
+	"onPan": { type: Function },
+	"onPanEnd": { type: Function }
+};
+export { MotionComponentProps };

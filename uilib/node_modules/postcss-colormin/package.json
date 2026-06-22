@@ -1,0 +1,48 @@
+{
+  "name": "postcss-colormin",
+  "version": "7.0.10",
+  "description": "Minify colors in your CSS files with PostCSS.",
+  "main": "src/index.js",
+  "types": "types/index.d.ts",
+  "files": [
+    "src",
+    "LICENSE-MIT",
+    "types"
+  ],
+  "keywords": [
+    "color",
+    "colors",
+    "compression",
+    "css",
+    "minify",
+    "postcss",
+    "postcss-plugin"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/cssnano/cssnano",
+  "author": {
+    "name": "Ben Briggs",
+    "email": "beneb.info@gmail.com",
+    "url": "http://beneb.info"
+  },
+  "repository": "cssnano/cssnano",
+  "dependencies": {
+    "@colordx/core": "^5.4.3",
+    "browserslist": "^4.28.2",
+    "caniuse-api": "^3.0.0",
+    "postcss-value-parser": "^4.2.0"
+  },
+  "bugs": {
+    "url": "https://github.com/cssnano/cssnano/issues"
+  },
+  "engines": {
+    "node": "^18.12.0 || ^20.9.0 || >=22.0"
+  },
+  "devDependencies": {
+    "@types/caniuse-api": "^3.0.6",
+    "postcss": "^8.5.13"
+  },
+  "peerDependencies": {
+    "postcss": "^8.5.13"
+  }
+}

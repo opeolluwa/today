@@ -5,3 +5,4 @@ pub use super::invitation::Entity as Invitation;
 pub use super::one_time_passwords::Entity as OneTimePasswords;
 pub use super::revoked_tokens::Entity as RevokedTokens;
 pub use super::users::Entity as Users;
+pub use super::workspaces::Entity as Workspaces;

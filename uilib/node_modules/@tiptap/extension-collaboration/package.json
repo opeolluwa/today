@@ -1,0 +1,55 @@
+{
+  "name": "@tiptap/extension-collaboration",
+  "version": "3.27.1",
+  "description": "collaboration extension for tiptap",
+  "keywords": [
+    "tiptap",
+    "tiptap extension"
+  ],
+  "homepage": "https://tiptap.dev",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ueberdosis/tiptap",
+    "directory": "packages/extension-collaboration"
+  },
+  "bugs": {
+    "url": "https://github.com/ueberdosis/tiptap/issues"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/ueberdosis"
+  },
+  "files": [
+    "src",
+    "dist"
+  ],
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": {
+        "import": "./dist/index.d.ts",
+        "require": "./dist/index.d.cts"
+      },
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "devDependencies": {
+    "@tiptap/y-tiptap": "^3.0.5",
+    "@tiptap/core": "^3.27.1",
+    "@tiptap/pm": "^3.27.1"
+  },
+  "peerDependencies": {
+    "@tiptap/y-tiptap": "^3.0.5",
+    "yjs": "^13",
+    "@tiptap/core": "3.27.1",
+    "@tiptap/pm": "3.27.1"
+  },
+  "scripts": {
+    "build": "tsup"
+  }
+}

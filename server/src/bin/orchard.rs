@@ -82,7 +82,10 @@ async fn main() -> Result<(), AppError> {
 
     let kernel = data_engine::DataEngine::new(&app_config.database_url).await?;
 
-    kernel.run_migrations().await?;
+    kernel
+        .run_migrations()
+        .await
+        .map_err(|e| KernelError::DbConnectError(e.to_string()))?;
 
     let db = kernel.connection().to_owned();
     let db_conn = Arc::new(db.clone());
