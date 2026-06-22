@@ -1,1 +1,0 @@
-export const features = {"hydration":true,"lazyLoad":true,"webVitals":true,"thirdPartyScripts":true,"htmlValidate":true}
