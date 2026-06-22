@@ -31,7 +31,6 @@ pub enum AppError {
 
     #[error(transparent)]
     FileSystemError(#[from] std::io::Error),
-
 }
 
 impl AppError {

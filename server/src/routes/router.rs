@@ -7,14 +7,12 @@ use crate::{
     response::ApiResponseBuilder,
     routes::{
         app::public_routes, auth::authentication_routes, country::country_routes,
-        notification::notification_routes, users::user_routes,
-        invitation::invitation_routes,
+        invitation::invitation_routes, notification::notification_routes, users::user_routes,
     },
     services::{
         authentication_service::AuthenticationService, country_service::CountryService,
-        notification_service::NotificationService, root_service::RootService,
-        user_service::UserService,
-        invitation_service::InvitationService,
+        invitation_service::InvitationService, notification_service::NotificationService,
+        root_service::RootService, user_service::UserService,
     },
     states::ServicesState,
 };

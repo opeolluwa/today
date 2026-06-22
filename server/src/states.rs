@@ -3,7 +3,9 @@ use axum::extract::FromRef;
 use seaography::async_graphql;
 
 use crate::services::{
-    authentication_service::AuthenticationService, country_service::CountryService, invitation_service::InvitationService, notification_service::NotificationService, root_service::RootService, user_service::UserService
+    authentication_service::AuthenticationService, country_service::CountryService,
+    invitation_service::InvitationService, notification_service::NotificationService,
+    root_service::RootService, user_service::UserService,
 };
 
 #[derive(Clone)]

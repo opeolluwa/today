@@ -1,1 +1,0 @@
-declare export const entireMetricsCollection: typeof import('@capsizecss/metrics/entireMetricsCollection').entireMetricsCollection

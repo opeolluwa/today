@@ -1,6 +1,7 @@
 pub mod authentication;
 pub mod country;
 pub mod file;
+pub mod invitation;
 pub mod jwt;
 pub mod notification;
 pub mod otp;
@@ -10,4 +11,3 @@ pub mod repository;
 pub mod request;
 pub mod users;
 pub mod wait_list;
-pub mod invitation;

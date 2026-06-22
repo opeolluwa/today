@@ -1,7 +1,0 @@
-export * from './feature';
-export * from './gestures';
-export * from './layout/layout';
-export * from './gestures/pan';
-export * from './animation/animation';
-export * from './dom-max';
-export * from './dom-animation';
