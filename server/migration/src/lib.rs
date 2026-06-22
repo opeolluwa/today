@@ -10,6 +10,7 @@ mod m20251225_150349_add_countries;
 mod m20251227_224856_make_profile_picture_nullable;
 mod m20251227_225947_make_user_name_nullable;
 mod m20260517000000_create_revoked_tokens;
+mod m20260614_212029_create_invitation_table;
 
 #[allow(unused_imports)]
 pub use sea_orm_migration::prelude::*;
@@ -36,6 +37,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20251227_224856_make_profile_picture_nullable::Migration),
             Box::new(m20251227_225947_make_user_name_nullable::Migration),
             Box::new(m20260517000000_create_revoked_tokens::Migration),
+            Box::new(m20260614_212029_create_invitation_table::Migration),
         ]
     }
 }

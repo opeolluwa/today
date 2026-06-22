@@ -80,6 +80,7 @@ dependencies = [
  "log",
  "markdown2pdf",
  "migration",
+ "rand_core 0.6.4",
  "reqwest",
  "sanitizer",
  "sea-orm",
