@@ -71,6 +71,13 @@ const pageTitle = computed(() => {
             <slot name="primary_cta" />
           </div>
 
+          <slot
+            v-if="
+              !workspaceStore.isCurrentWorkspaceLocked ||
+              route.path.startsWith('/settings')
+            "
+            name="modal_content"
+          />
           <div class="mt-5">
             <div
               v-if="

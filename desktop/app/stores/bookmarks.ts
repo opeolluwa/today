@@ -158,6 +158,7 @@ export const useBookmarkStore = defineStore("bookmark_store", {
         tag: b.tag,
         created_at: b.createdAt,
         updated_at: b.updatedAt,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         workspace_identifier: (b as any).workspaceIdentifier ?? null,
       }));
       const query = gql`

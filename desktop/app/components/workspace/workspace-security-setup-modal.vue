@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { Workspace } from "~/stores/workspaces";
-
 const props = defineProps<{
   open: boolean;
   workspaceId: string;

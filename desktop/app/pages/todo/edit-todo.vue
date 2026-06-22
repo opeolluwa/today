@@ -172,7 +172,7 @@ async function handleDelete() {
                   }}
                 </button>
                 <template #content>
-                  <DatePicker v-model="form.dueDate" />
+                  <AppDatePicker v-model="form.dueDate" />
                 </template>
               </UPopover>
               <button

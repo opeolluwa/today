@@ -60,7 +60,10 @@ body {
   overflow: hidden;
   overscroll-behavior: none;
   background-color: transparent;
-  @apply mt-24;
+}
+
+* {
+  user-select: none;
 }
 
 /*
@@ -183,9 +186,4 @@ h6.notes_heading {
 
 .dm-floating-menu {
   height: 12rem;
-}
-
-.dm-editor {
-  height: 65vh;
-  overflow: scroll;
 }
