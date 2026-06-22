@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import type { CreateSnippetPayload } from "~/stores/snippets";
 import { SNIPPET_LANGUAGES } from "~/data/languages";
-import AppInput from "../forms/input.vue";
-import AppSelect from "../forms/select.vue";
-
 const snippetStore = useSnippetStore();
 const router = useRouter();
 
@@ -40,7 +37,7 @@ async function handleSubmit() {
 <template>
   <form class="flex flex-col gap-5" @submit.prevent="handleSubmit">
     <div class="flex flex-col gap-1">
-      <AppInput
+      <FormsBaseInput
         v-model="title"
         hint="(optional)"
         placeholder="My snippet"
@@ -52,7 +49,7 @@ async function handleSubmit() {
 
     <!-- Language -->
 
-    <AppSelect
+    <FormsBaseSelect
       v-model="language"
       name="language"
       label="Language"

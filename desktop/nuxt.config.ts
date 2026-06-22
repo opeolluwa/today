@@ -2,7 +2,10 @@
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: false },
-  components: [{ path: "~/components"}],
+  components: [
+    { path: "~/components" },
+    { path: "../../uilib/components",},
+  ],
   app: {
     head: {
       meta: [
@@ -13,7 +16,11 @@ export default defineNuxtConfig({
       ],
     },
   },
-  css: [ "highlight.js/styles/atom-one-dark.css", "@domternal/theme", "@/assets/css/main.css",],
+  css: [
+    "highlight.js/styles/atom-one-dark.css",
+    "@domternal/theme",
+    "@/assets/css/main.css",
+  ],
   ssr: false,
   modules: [
     // "@nuxt/a11y",

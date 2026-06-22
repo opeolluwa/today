@@ -11,9 +11,10 @@ const form = reactive({
   title: "",
   description: "",
   dueDate: null as Date | null,
-  time: "",
   priority: "medium" as "high" | "medium" | "low",
 });
+
+const selectedTime = shallowRef();
 
 const submitting = ref(false);
 
@@ -43,7 +44,9 @@ async function handleSubmit() {
       title: form.title.trim(),
       description: form.description.trim() || undefined,
       dueDate: toIsoDate(form.dueDate) ?? undefined,
-      time: form.time || undefined,
+      time: selectedTime.value
+        ? `${String(selectedTime.value.hour).padStart(2, "0")}:${String(selectedTime.value.minute).padStart(2, "0")}`
+        : undefined,
       priority: form.priority,
     });
     notify({ type: "success", message: "Todo created" });
@@ -112,7 +115,7 @@ async function handleSubmit() {
                   }}
                 </button>
                 <template #content>
-                  <DatePicker v-model="form.dueDate" />
+                  <AppDatePicker v-model="form.dueDate" />
                 </template>
               </UPopover>
               <button
@@ -131,22 +134,16 @@ async function handleSubmit() {
               Time
             </label>
             <div class="flex items-center gap-2">
-              <div class="relative flex-1">
-                <UIcon
-                  name="heroicons:clock"
-                  class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400 pointer-events-none"
-                />
-                <input
-                  v-model="form.time"
-                  type="time"
-                  class="w-full bg-white dark:bg-gray-800 rounded-lg pl-9 pr-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent"
-                >
-              </div>
+              <UInputTime
+                v-model="selectedTime"
+                icon="i-lucide-clock"
+                class="flex-1"
+              />
               <button
-                v-if="form.time"
+                v-if="selectedTime"
                 type="button"
                 class="p-2.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
-                @click="form.time = ''"
+                @click="selectedTime = undefined"
               >
                 <UIcon name="heroicons:x-mark" class="size-4" />
               </button>

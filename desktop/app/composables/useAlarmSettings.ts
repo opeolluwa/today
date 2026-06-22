@@ -21,7 +21,10 @@ export function useAlarmSettings() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) settings.value = { ...DEFAULT_SETTINGS, ...JSON.parse(raw) };
-    } catch {}
+    } catch {
+      //TODO: handle error
+      console.warn("Failed to load alarm settings from localStorage");
+    }
   }
 
   function update(patch: Partial<AlarmSettings>) {

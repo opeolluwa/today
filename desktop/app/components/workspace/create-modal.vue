@@ -78,7 +78,7 @@ async function handleSubmit() {
     <template #body>
       <form class="pb-6 mt-4 flex flex-col" @submit.prevent="handleSubmit">
         <div class="flex flex-col gap-4">
-          <FormsInput
+          <FormsBaseInput
             v-model="form.name"
             label="Name"
             hint="required"
@@ -88,7 +88,7 @@ async function handleSubmit() {
             :error="errors.name"
             :disabled="loading"
           />
-          <FormsInput
+          <FormsBaseInput
             v-model="form.description"
             label="Description"
             hint="required"

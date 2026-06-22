@@ -28,6 +28,7 @@ const navSections: { key: Section; label: string; icon: string }[] = [
   { key: "about", label: "About", icon: "heroicons:information-circle" },
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isValidSection = (s: any): s is Section =>
   navSections.some((n) => n.key === s);
 
